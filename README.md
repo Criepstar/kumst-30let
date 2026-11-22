@@ -227,9 +227,13 @@ docker exec -it kumst-30 node scripts/seed.mjs
   (CSS-Spalten, damit die Archivformate erhalten bleiben).
 - Ein Klick öffnet die Lightbox (HTMX-Fragment, mit `←`/`→`/Esc und Deep-Link auf
   `/galerija/foto/<id>`); ohne JavaScript führt derselbe Link auf eine eigene Seite.
-- Ein Foto ist intern als **WebP** gespeichert (1800 px, Thumbnail 700 px). Die
-  Lightbox verlinkt es zusätzlich als `/media/<id>.jpg`: Wer das Bild in einem neuen
-  Tab öffnet oder per Rechtsklick speichert, bekommt ein gewohntes JPEG. Die
+- Ein Foto ist intern als **WebP** gespeichert (1800 px, Thumbnail 700 px). Im
+  Markup steht nur ein `<img src="/media/<id>.webp">` – kein Link, kein JS.
+  Wer das Bild per Rechtsklick in einem neuen Tab öffnet, bekommt trotzdem ein
+  gewohntes JPEG: „Bild in neuem Tab öffnen“ ist eine Top-Level-Navigation und
+  schickt `Sec-Fetch-Dest: document`, worauf `/media/[file].ts` mit `302` auf
+  `/media/<id>.jpg` antwortet (`Vary: Sec-Fetch-Dest`, `Cache-Control: no-store`).
+  Normale Bild-Requests (`Sec-Fetch-Dest: image`) bekommen weiterhin WebP. Die
   JPEG-Fassung wird beim ersten Aufruf serverseitig mit `sharp` erzeugt und in
   `data/uploads` zwischengespeichert.
 
