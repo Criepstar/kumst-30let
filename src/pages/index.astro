@@ -12,57 +12,47 @@ const photos = await listPhotos(true);
 
 <Base>
   <!-- ------------------------------------------------------------ Hero -->
+  <!-- Die Grafik ist die Cover-Illustration der Broschüre: Sie enthält den
+       Ziegeltitel «30 let – 30 Jahre» und den Claim «Kulturni most /
+       Kulturbrücke». Deshalb trägt sie den Hero allein; der Titel steht für
+       Suchmaschinen und Screenreader zusätzlich als `sr-only`-H1 im Markup. -->
   <section class="relative overflow-hidden bg-wine text-cream">
     <div class="pointer-events-none absolute inset-0 opacity-[0.06] bricks-cream" aria-hidden="true">
     </div>
 
-    <div
-      class="shell relative grid items-center gap-7 pt-8 pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:gap-14 lg:pt-12 lg:pb-14"
-    >
-      <div class="relative z-10">
-        <div class="flex items-center gap-3">
-          <span class="block h-px w-10 bg-sage" aria-hidden="true"></span>
-          <p class="label text-sage">{HERO.years}</p>
-        </div>
+    <div class="shell relative flex flex-col items-center pt-8 pb-9 text-center lg:pt-10 lg:pb-11">
+      <h1 class="sr-only">{HERO.titleTop} / {HERO.titleBottom} KUMST – Žitara vas / Sittersdorf</h1>
 
-        <h1 class="mt-4 text-cream lg:mt-5">
-          <span class="block text-[clamp(2.5rem,7.2vw,5rem)] leading-[0.84]">{HERO.titleTop}</span>
-          <span
-            class="mt-1 block text-[clamp(2.5rem,7.2vw,5rem)] leading-[0.84] text-transparent"
-            style="-webkit-text-stroke: 1.5px var(--color-cream);"
-            lang="de">{HERO.titleBottom}</span
-          >
-        </h1>
-
-
-
-        <BiText sl={HERO.leadSl} de={HERO.leadDe} tone="dark" size="lead" class="mt-5 max-w-xl lg:mt-6" />
-
-        <div class="mt-7 flex flex-wrap items-center gap-3 lg:mt-8">
-          <a class="btn btn-cream" href="#galerija">
-            {HERO.ctaGallery.sl} / {HERO.ctaGallery.de}
-            <span aria-hidden="true">↓</span>
-          </a>
-          <a
-            class="btn hidden border-cream/60 text-cream hover:bg-cream hover:text-wine sm:inline-flex"
-            href={u(SITE.brochure.file)}
-            target="_blank"
-            rel="noopener"
-          >
-            {HERO.ctaBrochure.sl} / {HERO.ctaBrochure.de}
-          </a>
-        </div>
+      <div class="flex items-center gap-3">
+        <span class="block h-px w-8 bg-rose/50" aria-hidden="true"></span>
+        <p class="label text-rose">{HERO.years}</p>
+        <span class="block h-px w-8 bg-rose/50" aria-hidden="true"></span>
       </div>
 
-      <div class="relative">
-        <img
-          src={u('/brand/kumst-hero.svg')}
-          alt="Ilustracija kulturnega doma KUMST / Illustration des Kulturhauses KUMST"
-          width="590"
-          height="500"
-          class="mx-auto h-auto w-full max-h-[32vh] object-contain sm:max-h-[42vh] lg:max-h-[52vh]"
-          fetchpriority="high"
-        />
+      <img
+        src={u('/brand/kumst-hero.svg')}
+        alt="Naslovnica brošure: hiša KUMST iz zidakov in most / Broschüren-Cover: Kulturhaus KUMST aus Ziegeln und eine Brücke"
+        width="967"
+        height="1064"
+        class="mt-4 h-auto w-auto max-h-[32vh] object-contain sm:mt-5 sm:max-h-[46vh] lg:max-h-[50vh]"
+        fetchpriority="high"
+      />
+
+      <BiText sl={HERO.leadSl} de={HERO.leadDe} tone="dark" size="lead" class="mt-6 max-w-2xl sm:mt-7" />
+
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-7">
+        <a class="btn btn-cream on-dark" href="#galerija">
+          {HERO.ctaGallery.sl} / {HERO.ctaGallery.de}
+          <span aria-hidden="true">↓</span>
+        </a>
+        <a
+          class="btn on-dark hidden border-cream/60 text-cream hover:bg-cream hover:text-wine sm:inline-flex"
+          href={u(SITE.brochure.file)}
+          target="_blank"
+          rel="noopener"
+        >
+          {HERO.ctaBrochure.sl} / {HERO.ctaBrochure.de}
+        </a>
       </div>
     </div>
 

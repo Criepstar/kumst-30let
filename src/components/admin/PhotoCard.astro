@@ -18,7 +18,7 @@ const formAttrs = {
 };
 ---
 
-<article class:list={['border bg-cream-soft', photo.published ? 'border-wine/20' : 'border-dashed border-magenta/60']}>
+<article class:list={['border bg-cream-soft', photo.published ? 'border-wine/20' : 'border-dashed border-ink/45']}>
   <div class="relative bg-cream-deep">
     <img
       src={mediaUrl(photo.id, 'thumb')}
@@ -32,7 +32,7 @@ const formAttrs = {
       <span class="label bg-wine px-2 py-1 text-cream">{index + 1}/{total}</span>
       {
         !photo.published && (
-          <span class="label bg-magenta px-2 py-1 text-cream">neobjavljeno / unveröffentlicht</span>
+          <span class="label bg-ink px-2 py-1 text-cream">neobjavljeno / unveröffentlicht</span>
         )
       }
     </div>
@@ -97,7 +97,7 @@ const formAttrs = {
         <input type="hidden" name="aktion" value="loeschen" />
         <button
           type="submit"
-          class="btn border-magenta/50 px-2 py-1.5 text-[0.625rem] text-magenta hover:bg-magenta hover:text-cream"
+          class="btn border-wine/50 px-2 py-1.5 text-[0.625rem] text-wine hover:bg-wine hover:text-cream"
           aria-label="Löschen"
         >✕</button>
       </form>

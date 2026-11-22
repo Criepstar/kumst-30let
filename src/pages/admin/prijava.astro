@@ -16,7 +16,7 @@ const fehler = Astro.url.searchParams.get('napaka') === '1';
     <div class="w-full max-w-md">
       <div class="bg-wine px-8 py-10 text-cream sm:px-10">
         <p class="font-display text-4xl leading-none font-black tracking-[-0.02em] uppercase">KUMST</p>
-        <p class="label mt-3 text-sage">30 let / 30 Jahre</p>
+        <p class="label mt-3 text-rose">30 let / 30 Jahre</p>
         <h1 class="mt-8 text-2xl leading-none text-cream">Uredništvo</h1>
         <p lang="de" class="mt-2 font-display text-base font-black uppercase tracking-[0.02em] text-rose">
           Redaktionsbereich
@@ -40,7 +40,7 @@ const fehler = Astro.url.searchParams.get('napaka') === '1';
               required
               autocomplete="current-password"
               autofocus
-              class="mt-1.5 w-full border border-cream/35 bg-wine-deep px-3 py-2.5 text-[0.9375rem] text-cream placeholder-cream/30 focus:border-magenta focus:outline-none"
+              class="mt-1.5 w-full border border-cream/35 bg-wine-deep px-3 py-2.5 text-[0.9375rem] text-cream placeholder-cream/30 focus:border-cream focus:outline-none focus-visible:outline-cream"
               placeholder="••••••••"
             />
           </label>
@@ -49,14 +49,14 @@ const fehler = Astro.url.searchParams.get('napaka') === '1';
             Prijava / Anmelden <span aria-hidden="true">→</span>
           </button>
 
-          <span id="toast-indicator" class="htmx-indicator label text-sage">… preverjam</span>
+          <span id="toast-indicator" class="htmx-indicator label text-rose">… preverjam</span>
         </form>
 
         <div id="meldung" aria-live="polite" class="mt-4"></div>
 
         {
           fehler && (
-            <p class="mt-4 text-[0.875rem] text-rose">
+            <p class="mt-4 border-l-2 border-cream/70 pl-3 text-[0.875rem] text-cream">
               Napačno geslo. / Falsches Passwort.
             </p>
           )
@@ -64,7 +64,7 @@ const fehler = Astro.url.searchParams.get('napaka') === '1';
       </div>
 
       <div class="mt-6 flex items-center justify-between">
-        <a class="label text-ink/60 hover:text-magenta" href={u('/')}>← KUMST</a>
+        <a class="label text-ink/60 hover:text-accent" href={u('/')}>← KUMST</a>
         <p class="label text-ink/40">Samo za uredništvo / nur Redaktion</p>
       </div>
     </div>

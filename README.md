@@ -81,13 +81,13 @@ src/
     auth.ts                    HMAC-Cookie, Rate-Limit
   styles/global.css            Design-Tokens (@theme), Papierkorn, Ziegelmuster, Komponenten
 public/
-  brand/                       Hero-Illustration (kumst-hero.svg), Cover, OG-Bild,
-                               Fördergeber-Logos
-design/                        Originalgrafiken, die nicht ausgeliefert werden
-                               (kumst-illustration.svg: vollständige Illustration der
-                               Broschüre; kumst-hero.svg in public/brand ist daraus
-                               zugeschnitten – ohne «30 LET – 30 JAHRE» und Ziegelwand)
+  brand/                       Titelbild (kumst-hero.svg = Cover-Illustration der
+                               Broschüre: Ziegeltitel, Haus, KUMST, Claim – beige auf
+                               transparent), OG-Bild, Fördergeber-Logos
   download/                    die Broschüre als PDF
+  favicon.svg                  Ziegel-Kürzel K in Rot/Beige
+design/                        Originalgrafiken, die nicht ausgeliefert werden
+                               (kumst-illustration.svg: ältere Illustration ohne Titel)
 data/                          Laufzeitdaten (nicht im Git): gallery.json, uploads/, .session-secret
 seed/photos/                   Archivfotos aus der PDF (Quelle für npm run seed)
 scripts/seed.mjs               befüllt data/ mit den Seed-Fotos
@@ -237,15 +237,26 @@ docker exec -it kumst-30 node scripts/seed.mjs
 
 Aus dem PDF extrahiert und als Tokens in `src/styles/global.css` hinterlegt:
 
-| Rolle              | Wert      |
-| ------------------ | --------- |
-| Papier / Creme     | `#F1E7D3` |
-| Weinrot            | `#7D1C27` |
-| Grün               | `#639C69` |
-| Tintengrün (Text)  | `#27311A` |
-| Magenta (Akzent)   | `#EC008C` |
-| Altrosa            | `#CCA8A0` |
-| Slate              | `#514F66` |
+| Rolle                        | Wert      |
+| ---------------------------- | --------- |
+| Beige (Papier)               | `#F5ECDA` |
+| Rot (Flächen, Primäres)      | `#821E22` |
+| Hellgrün (Deko, Marker)      | `#659A60` |
+| Dunkelgrün (Text, Tiefe)     | `#30351C` |
+| Violett (Links, Fokus)       | `#564F66` |
+
+Das sind die **einzigen** fünf Farben; alle Zwischentöne in `global.css` sind
+Mischungen daraus (`cream-deep`, `wine-deep`, `sage-deep`, `rose`):
+
+| Abgeleitet  | Wert      | Verwendung                                   |
+| ----------- | --------- | -------------------------------------------- |
+| `cream-deep` | `#D9D2BF` | Beige + Dunkelgrün 14 % – Bänder, Kartenrahmen |
+| `wine-deep`  | `#702321` | Rot + Dunkelgrün 22 % – Lightbox, Hover        |
+| `sage-deep`  | `#4A683E` | Hellgrün + Dunkelgrün 50 % – Labels auf Beige  |
+| `rose`       | `#D7B6AA` | Beige + Rot 26 % – deutsche Zeilen auf Rot     |
+
+`sage-deep` und `rose` sind Kontrast-Ableitungen: Hellgrün allein erreicht auf
+Beige nur 2,8 : 1, deshalb tragen Labels das dunklere Grün (5,4 : 1).
 
 Schriften: im Druck **Circe** (kommerziell) und **Poppins Black**. Ersetzt durch
 **Mulish Variable** (Lauftext) und **Poppins 900** (Auszeichnung), beide lokal über

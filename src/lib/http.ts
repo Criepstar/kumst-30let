@@ -3,7 +3,7 @@
 export function htmlMessage(text: string, tone: 'error' | 'ok' = 'error', status = 200): Response {
   const classes =
     tone === 'error'
-      ? 'border-magenta/50 bg-magenta/10 text-magenta'
+      ? 'border-wine/50 bg-wine/10 text-wine'
       : 'border-sage/60 bg-sage/10 text-sage-deep';
   return new Response(`<p class="border px-3 py-2 text-[0.875rem] ${classes}">${text}</p>`, {
     status,
