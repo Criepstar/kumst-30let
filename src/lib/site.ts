@@ -35,7 +35,6 @@ export const SITE = {
     city: '9133 Žitara vas / Sittersdorf',
     country: 'Avstrija / Österreich',
     mail: 'info@trta.at',
-    web: 'www.trta.at',
   },
   gallery: {
     /** maximale Kantenlänge, in der Fotos gespeichert werden */

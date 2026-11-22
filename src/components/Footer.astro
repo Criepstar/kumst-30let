@@ -6,58 +6,47 @@ const year = new Date().getFullYear();
 ---
 
 <!--
-  Kolofon/Impressum und Fußzeile sind eine gemeinsame Sektion: Kontakt,
-  Fördergeber und Copyright an einem Ort. Die Kontaktangaben stehen als
-  Spalten im Footer – kein eigener Kasten, keine leere zweite Spalte.
+  Kolofon/Impressum: ein einziger roter Streifen. Kontakt, Förderhinweis,
+  Fördergeber-Logos und Copyright fließen ohne Kästen und Trennlinien
+  ineinander – kein separates beiges Kontaktband mehr.
 -->
-<footer id="kolofon" class="border-t border-wine/20 bg-cream-deep/45">
-  <div class="shell py-12 sm:py-14">
-    <p class="label text-sage-deep">
-      {KOLOFON.contact.sl} <span class="text-wine/35">/</span> {KOLOFON.contact.de}
-    </p>
-
+<footer id="kolofon" class="bg-wine text-cream">
+  <div class="shell py-10 sm:py-12 lg:py-14">
     <div
-      class="mt-5 grid gap-x-12 gap-y-6 text-[0.9375rem] leading-relaxed text-ink sm:grid-cols-2 lg:grid-cols-3"
+      class="flex flex-col gap-9 text-[0.875rem] leading-relaxed sm:text-[0.9375rem] lg:flex-row lg:items-start lg:justify-between lg:gap-16"
     >
-      <div>
-        <p class="font-semibold">{SITE.org.nameSl}</p>
-        <p lang="de" class="text-wine">{SITE.org.nameDe}</p>
-      </div>
-
+      <!-- Kontakt -->
       <address class="not-italic">
-        <p>{SITE.org.street}</p>
-        <p>{SITE.org.city}</p>
-        <p>{SITE.org.country}</p>
+        <p class="font-semibold">{SITE.org.nameSl}</p>
+        <p lang="de" class="text-cream/70">{SITE.org.nameDe}</p>
+        <p class="mt-3 text-cream/70">
+          {SITE.org.street}<br />
+          {SITE.org.city}<br />
+          {SITE.org.country}
+        </p>
+        <p class="mt-3">
+          <a
+            class="underline decoration-cream/40 underline-offset-[0.25em] transition-colors hover:decoration-cream"
+            href={`mailto:${SITE.org.mail}`}>{SITE.org.mail}</a
+          >
+        </p>
       </address>
 
-      <div class="space-y-1 sm:col-span-2 lg:col-span-1">
-        <p>
-          <a class="link-accent" href={`mailto:${SITE.org.mail}`}>{SITE.org.mail}</a>
-        </p>
-        <p>
-          <a class="link-accent" href={`https://${SITE.org.web}`} rel="noopener">{SITE.org.web}</a>
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Fördergeber – wie die Seitenleiste der Broschüre -->
-  <div class="bg-wine text-cream">
-    <div class="shell flex flex-col gap-7 py-8 sm:flex-row sm:items-center sm:justify-between">
-      <div class="max-w-sm">
+      <!-- Förderung, Fördergeber, Copyright -->
+      <div class="max-w-sm lg:shrink-0">
         <p class="text-[0.8125rem] leading-relaxed text-cream/90" lang="sl">{KOLOFON.fundingSl}</p>
         <p class="mt-1 text-[0.8125rem] leading-relaxed text-cream/60" lang="de">{KOLOFON.funding}</p>
-        <p class="label mt-4 text-cream/45">© {year} SPD Trta</p>
+        <img
+          src={u('/brand/foerdergeber.png')}
+          alt="Logos der Fördergeber: Bundeskanzleramt, Druckerei Mohorjeva Hermagoras, Grafik Mario Franc Korpitsch"
+          width="1575"
+          height="832"
+          loading="lazy"
+          decoding="async"
+          class="mt-5 h-auto w-56 sm:w-72"
+        />
+        <p class="label mt-5 text-cream/45">© {year} SPD Trta</p>
       </div>
-      <img
-        src={u('/brand/foerdergeber.png')}
-        alt="Logos der Fördergeber: Bundeskanzleramt, Druckerei Mohorjeva Hermagoras, Grafik Mario Franc Korpitsch"
-        width="1575"
-        height="832"
-        loading="lazy"
-        decoding="async"
-        class="mx-auto h-auto w-56 shrink-0 sm:mx-0 sm:w-80"
-      />
     </div>
   </div>
 </footer>
