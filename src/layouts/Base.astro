@@ -108,6 +108,86 @@ const ogImage = new URL(u('/brand/og.jpg'), siteOrigin).toString();
         }
       });
 
+      // Wischen über das Foto blättert weiter. Ein Wisch zählt nicht als Klick –
+      // so öffnet sich dabei nicht versehentlich die .jpg-Fassung in einem Tab.
+      let swipeStartX = 0;
+      let swipeStartY = 0;
+      let swipeTracking = false;
+      let swipeActive = false;
+      let suppressClickUntil = 0;
+
+      const resetSwipe = () => {
+        swipeTracking = false;
+        swipeActive = false;
+      };
+
+      document.addEventListener(
+        'pointerdown',
+        (event) => {
+          const target = event.target as HTMLElement | null;
+          if (!target?.closest('[data-lb-stage]')) return;
+          if (event.pointerType === 'mouse' && event.button !== 0) return;
+          swipeStartX = event.clientX;
+          swipeStartY = event.clientY;
+          swipeTracking = true;
+          swipeActive = false;
+        },
+        true,
+      );
+
+      document.addEventListener(
+        'pointermove',
+        (event) => {
+          if (!swipeTracking) return;
+          const dx = event.clientX - swipeStartX;
+          const dy = event.clientY - swipeStartY;
+          if (!swipeActive && Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) {
+            swipeActive = true;
+          }
+        },
+        true,
+      );
+
+      document.addEventListener(
+        'pointerup',
+        (event) => {
+          if (!swipeTracking) return;
+          const dx = event.clientX - swipeStartX;
+          const dy = event.clientY - swipeStartY;
+          const wasSwipe = swipeActive;
+          resetSwipe();
+          const flipped = wasSwipe && Math.abs(dx) >= 45 && Math.abs(dx) >= Math.abs(dy);
+          if (flipped) {
+            const selector = dx < 0 ? '[data-lb-next]' : '[data-lb-prev]';
+            (document.querySelector(selector) as HTMLElement | null)?.click();
+          }
+          // Erst nach dem Weiterblättern sperren – sonst schluckt der Filter
+          // genau den ausgelösten Klick. Der Klick, den der Browser nach dem
+          // Wischen selbst noch schickt, wird dadurch verworfen.
+          if (wasSwipe) suppressClickUntil = Date.now() + 350;
+        },
+        true,
+      );
+
+      document.addEventListener('pointercancel', resetSwipe, true);
+
+      // Der Klick direkt nach einem Wisch wird geschluckt
+      document.addEventListener(
+        'click',
+        (event) => {
+          if (Date.now() >= suppressClickUntil) return;
+          event.preventDefault();
+          event.stopPropagation();
+        },
+        true,
+      );
+
+      // Kein natives Bild-Ziehen im Betrachter
+      document.addEventListener('dragstart', (event) => {
+        const target = event.target as HTMLElement | null;
+        if (target?.closest('[data-lb-stage] img')) event.preventDefault();
+      });
+
       document.body.addEventListener('htmx:afterSwap', (event) => {
         const detail = (event as CustomEvent).detail;
         if (detail?.target?.id !== 'lightbox-slot') return;
