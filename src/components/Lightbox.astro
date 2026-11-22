@@ -15,8 +15,10 @@ interface Props {
 const { photo, prev, next, index, total, galleryUrl } = Astro.props;
 const caption = photo.captionSl || photo.captionDe;
 const photoHref = (id: string) => u(`/galerija/foto/${id}`);
+
 const arrowClass =
-  'pointer-events-auto absolute top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-cream/30 bg-wine-deep/55 text-cream/90 backdrop-blur-[2px] transition-colors hover:border-cream hover:bg-cream hover:text-wine sm:static sm:h-12 sm:w-12 sm:shrink-0 sm:translate-y-0 sm:self-center sm:bg-transparent';
+  'pointer-events-auto inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-cream/30 text-cream/85 transition-colors hover:border-cream hover:bg-cream hover:text-wine sm:h-12 sm:w-12';
+const iconClass = 'h-5 w-5';
 ---
 
 <div
@@ -30,50 +32,45 @@ const arrowClass =
   <div class="absolute inset-0" data-lb-close aria-hidden="true"></div>
 
   <div class="pointer-events-none relative flex h-full flex-col">
-    <!-- Kopfzeile: zurück, Zähler, schließen -->
+    <!-- Kopfzeile: Zähler und schließen -->
     <div
       class="pointer-events-auto flex shrink-0 items-center justify-between gap-3 px-3 py-2.5 sm:px-6 sm:py-3"
     >
+      <p class="label whitespace-nowrap text-cream/70">
+        {index + 1} <span class="text-cream/35">/</span> {total}
+      </p>
+
       <a
-        class="label on-dark inline-flex h-9 min-w-9 shrink-0 items-center justify-center gap-2 rounded-full border border-cream/30 px-2 text-cream/75 transition-colors hover:border-cream hover:text-cream sm:border-0 sm:px-0"
+        class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cream/30 text-cream/80 transition-colors hover:border-cream hover:bg-cream hover:text-wine"
         href={galleryUrl}
         data-lb-close
-        aria-label={`${GALLERY.back.sl} / ${GALLERY.back.de}`}
+        aria-label="Zapri / Schließen"
       >
-        <span aria-hidden="true" class="text-[1rem] leading-none">←</span>
-        <span class="hidden sm:inline"
-          >{GALLERY.back.sl} <span class="text-cream/30">/</span> {GALLERY.back.de}</span
+        <svg
+          class={iconClass}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"></path></svg
         >
       </a>
-
-      <div class="flex shrink-0 items-center gap-2 sm:gap-3">
-        <p class="label whitespace-nowrap text-cream/70">
-          {index + 1} <span class="text-cream/35">/</span> {total}
-        </p>
-        <a
-          class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cream/30 text-[0.875rem] text-cream/80 transition-colors hover:border-cream hover:bg-cream hover:text-wine"
-          href={galleryUrl}
-          data-lb-close
-          aria-label="Zapri / Schließen"
-        >
-          <span aria-hidden="true">✕</span>
-        </a>
-      </div>
     </div>
 
     <!--
-      Bühne: die Pfeile stehen links und rechts vom Bild (mobil liegen sie
-      am Bildrand darüber, damit das Foto die volle Breite behält). Wischen
-      über das Bild blättert ebenfalls weiter.
+      Bühne: ab sm stehen die Pfeile links und rechts vom Bild. Mobil rutschen
+      sie unter das Foto – dort wäre über dem Bild kein Platz, ohne es zu
+      verdecken. Wischen über das Bild blättert ebenfalls weiter.
     -->
     <div
-      class="pointer-events-none relative flex min-h-0 flex-1 touch-none select-none items-stretch justify-center gap-1 px-1 pb-3 sm:gap-5 sm:px-6 sm:pb-5"
+      class="pointer-events-none relative flex min-h-0 flex-1 flex-wrap touch-none select-none content-center items-center justify-center gap-x-6 gap-y-4 px-3 pb-5 sm:flex-nowrap sm:gap-x-5 sm:px-6 sm:pb-5"
       data-lb-stage
     >
       {
         prev && (
           <a
-            class={`${arrowClass} left-1`}
+            class={`${arrowClass} order-2 sm:order-none`}
             href={photoHref(prev.id)}
             hx-get={photoHref(prev.id)}
             hx-target="#lightbox-slot"
@@ -82,13 +79,26 @@ const arrowClass =
             data-lb-prev
             aria-label="Prejšnja fotografija / Vorheriges Foto"
           >
-            <span aria-hidden="true">←</span>
+            <svg
+              class={iconClass}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M14.5 5.5L8 12l6.5 6.5" />
+            </svg>
           </a>
         )
       }
 
-      <div class="pointer-events-auto flex min-w-0 flex-col items-center justify-center">
-        <!-- Verlinkt auf die JPEG-Fassung: Linksklick und „Grafik in neuem Tab öffnen“ liefern ein .jpg -->
+      <div
+        class="pointer-events-auto order-1 flex w-full min-w-0 basis-full flex-col items-center justify-center sm:order-none sm:w-auto sm:basis-auto"
+      >
+        <!-- Verlinkt auf die JPEG-Fassung: Linksklick und „Link in neuem Tab öffnen“ liefern ein .jpg -->
         <a
           class="block max-w-full cursor-zoom-in"
           href={photoFileUrl(photo.id)}
@@ -104,7 +114,7 @@ const arrowClass =
             width={photo.width}
             height={photo.height}
             draggable="false"
-            class="max-h-[calc(100svh-10.5rem)] w-auto max-w-full object-contain shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] sm:max-h-[calc(100svh-9.5rem)]"
+            class="max-h-[calc(100svh-12rem)] w-auto max-w-full object-contain shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] sm:max-h-[calc(100svh-9.5rem)]"
           />
         </a>
 
@@ -136,7 +146,7 @@ const arrowClass =
       {
         next && (
           <a
-            class={`${arrowClass} right-1`}
+            class={`${arrowClass} order-3 sm:order-none`}
             href={photoHref(next.id)}
             hx-get={photoHref(next.id)}
             hx-target="#lightbox-slot"
@@ -145,7 +155,18 @@ const arrowClass =
             data-lb-next
             aria-label="Naslednja fotografija / Nächstes Foto"
           >
-            <span aria-hidden="true">→</span>
+            <svg
+              class={iconClass}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M9.5 5.5L16 12l-6.5 6.5" />
+            </svg>
           </a>
         )
       }
