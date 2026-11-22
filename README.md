@@ -81,8 +81,12 @@ src/
     auth.ts                    HMAC-Cookie, Rate-Limit
   styles/global.css            Design-Tokens (@theme), Papierkorn, Ziegelmuster, Komponenten
 public/
-  brand/                       Illustration (kumst-hero.svg = Zuschnitt für den Hero), Cover,
-                               OG-Bild, Fördergeber-Logos
+  brand/                       Hero-Illustration (kumst-hero.svg), Cover, OG-Bild,
+                               Fördergeber-Logos
+design/                        Originalgrafiken, die nicht ausgeliefert werden
+                               (kumst-illustration.svg: vollständige Illustration der
+                               Broschüre; kumst-hero.svg in public/brand ist daraus
+                               zugeschnitten – ohne «30 LET – 30 JAHRE» und Ziegelwand)
   download/                    die Broschüre als PDF
 data/                          Laufzeitdaten (nicht im Git): gallery.json, uploads/, .session-secret
 seed/photos/                   Archivfotos aus der PDF (Quelle für npm run seed)
@@ -193,6 +197,10 @@ location /30-let-kumst/ {
 ```
 
 ### Variante 2: Docker
+
+Das Image basiert auf `node:24-alpine` (astro@7 verlangt mindestens Node 22.23.4) und
+bringt einen `HEALTHCHECK` auf `/<BASE_PATH>/robots.txt` mit. Build-Args sind
+`BASE_PATH` und `SITE_URL`; beide werden eingebacken.
 
 ```bash
 docker build -t kumst-30 .

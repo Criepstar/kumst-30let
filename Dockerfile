@@ -1,5 +1,6 @@
 # KUMST – 30 let / 30 Jahre · Node-SSR (Astro) im Container
-FROM node:22-alpine AS build
+# Node 24, weil astro@7 mindestens Node 22.23.4 verlangt – 24 hat Reserve.
+FROM node:24-alpine AS build
 WORKDIR /app
 
 # Abhängigkeiten zuerst (bessere Layer-Caches)
@@ -13,7 +14,7 @@ ARG SITE_URL=https://www.trta.at/30-let-kumst
 ENV BASE_PATH=$BASE_PATH SITE_URL=$SITE_URL
 RUN npm run build && npm prune --omit=dev
 
-FROM node:22-alpine AS runtime
+FROM node:24-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production \
     PORT=4321 \
@@ -31,6 +32,11 @@ COPY --from=build /app/seed ./seed
 RUN mkdir -p /data && chown -R node:node /data /app
 VOLUME ["/data"]
 USER node
+
+# Basis-Pfad nur für die Statusprüfung (die App selbst hat ihn eingebacken)
+ARG BASE_PATH=/30-let-kumst
+HEALTHCHECK --interval=30s --timeout=4s --start-period=15s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:' + process.env.PORT + '${BASE_PATH}/robots.txt').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
 EXPOSE 4321
 CMD ["node", "./dist/server/entry.mjs"]
