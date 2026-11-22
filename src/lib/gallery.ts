@@ -162,7 +162,7 @@ export async function deletePhoto(id: string): Promise<boolean> {
   const photos = g.photos.filter((p) => p.id !== id);
   if (photos.length === g.photos.length) return false;
   await writeGallery({ version: 1, photos });
-  for (const suffix of ['.webp', '-t.webp']) {
+  for (const suffix of ['.webp', '-t.webp', '.jpg']) {
     await unlink(path.join(UPLOAD_DIR, `${id}${suffix}`)).catch(() => {});
   }
   return true;
@@ -182,4 +182,14 @@ export async function movePhoto(id: string, direction: -1 | 1): Promise<boolean>
 export function mediaFilePath(id: string, variant: 'full' | 'thumb'): string | null {
   if (!/^[a-z0-9]{6,24}$/i.test(id)) return null;
   return path.join(UPLOAD_DIR, variant === 'thumb' ? `${id}-t.webp` : `${id}.webp`);
+}
+
+/**
+ * JPEG-Fassung eines Fotos – entsteht bei Bedarf aus dem WebP (siehe /media/[file].ts)
+ * und bleibt als Cache in data/uploads liegen. Für „in neuem Tab öffnen“ und
+ * Rechtsklick-Speichern, wo alle ein .jpg erwarten.
+ */
+export function jpegFilePath(id: string): string | null {
+  if (!/^[a-z0-9]{6,24}$/i.test(id)) return null;
+  return path.join(UPLOAD_DIR, `${id}.jpg`);
 }

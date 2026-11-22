@@ -1,7 +1,12 @@
 # KUMST – 30 let / 30 Jahre
 
 Website zur Jubiläumsbroschüre des **Slovensko prosvetno društvo Trta / Slowenischer
-Kulturverein Trta**: Bildergalerie mit Lightbox, Broschüren-Download und ein kleiner
+Kulturverein Trta** – die Broschüre ist das Hauptmedium, die Website ist ihre
+erweiterte Bildergalerie.
+
+Die Seite ist ein **One-Pager** mit drei Teilen: Hero → Galerie → Kolofon/Impressum.
+Die Galerie liegt direkt auf der Startseite (kein Navigationsmenü), die Broschüre
+lässt sich an mehreren Stellen als PDF herunterladen. Dazu ein kleiner
 Redaktionsbereich für Fotos.
 
 Gebaut mit **Astro** (Node-SSR), **HTMX** (Lightbox, Upload, Galerie-Verwaltung) und
@@ -57,25 +62,27 @@ Admin-Seite weist darauf hin.
 ```
 src/
   pages/
-    index.astro                Startseite: Hero, Geschichte, Zeitleiste, Galerie-Teaser, Broschüre
-    galerija/index.astro       Bildergalerie (Masonry)
+    index.astro                One-Pager: Hero, Galerie (Masonry, alle Fotos), Broschüren-Download
     galerija/foto/[id].astro   Lightbox-Fragment (HTMX) bzw. eigene Seite ohne JS
-    kolofon.astro              Impressum / Kolofon
+    galerija/index.astro       301 → /#galerija
+    kolofon.astro              301 → /#kolofon
+    impressum.astro            301 → /#kolofon
     admin/index.astro          Redaktion: Upload, Bildtexte, Reihenfolge, Sichtbarkeit
     admin/prijava.astro        Anmeldung
     admin/mreza.astro          HTMX-Partial: Foto-Grid neu rendern
-    media/[file].ts            liefert die WebP-Dateien aus data/uploads
+    media/[file].ts            liefert WebP (Seite) und JPEG (neuer Tab) aus data/uploads
     api/admin/…                Login/Logout, Upload, Aktionen pro Foto
-  components/                  Header, Footer, PhotoGrid, Lightbox, Timeline, Admin-Karten
+  components/                  Footer (= Kolofon + Fußzeile), PhotoGrid, Lightbox, Admin-Karten
   layouts/Base.astro           Head/OG, HTMX-Init, Lightbox-Tastatursteuerung
   lib/
-    site.ts                    Adressen, BASE_PATH-Helfer u(), Kontaktdaten
+    site.ts                    Adressen, BASE_PATH-Helfer u(), mediaUrl(), photoFileUrl()
     content.ts                 alle zweisprachigen Texte (SL zuerst, dann DE)
     gallery.ts                 JSON-Store data/gallery.json + Bildverarbeitung (sharp)
     auth.ts                    HMAC-Cookie, Rate-Limit
   styles/global.css            Design-Tokens (@theme), Papierkorn, Ziegelmuster, Komponenten
 public/
-  brand/                       Illustration, Cover, OG-Bild, Fördergeber-Logos
+  brand/                       Illustration (kumst-hero.svg = Zuschnitt für den Hero), Cover,
+                               OG-Bild, Fördergeber-Logos
   download/                    die Broschüre als PDF
 data/                          Laufzeitdaten (nicht im Git): gallery.json, uploads/, .session-secret
 seed/photos/                   Archivfotos aus der PDF (Quelle für npm run seed)
@@ -94,7 +101,7 @@ scripts/seed.mjs               befüllt data/ mit den Seed-Fotos
   Reihenfolge in der Galerie. Neue Uploads hängen hinten an.
 - **Sichtbarkeit**: „Skrij / Ausblenden“ nimmt ein Foto aus der öffentlichen Galerie,
   ohne es zu löschen.
-- **Löschen**: entfernt Eintrag und beide WebP-Dateien.
+- **Löschen**: entfernt Eintrag, beide WebP-Dateien und das erzeugte JPEG.
 - Alle Aktionen laufen über HTMX; die Kopfzeile zeigt live die Anzahl
   veröffentlichter Fotos.
 
@@ -108,6 +115,8 @@ Alles Inhaltliche liegt in `data/`:
 
 - `data/gallery.json` – Reihenfolge, Bildtexte, Sichtbarkeit
 - `data/uploads/*.webp` – die Bilder (`<id>.webp` und `<id>-t.webp`)
+- `data/uploads/*.jpg` – JPEG-Fassung für „in neuem Tab öffnen“, entsteht bei Bedarf
+  aus dem WebP und darf jederzeit gelöscht werden (wird neu erzeugt)
 - `data/.session-secret` – Signatur-Schlüssel der Anmeldung
 
 Für ein Backup genügt es, dieses Verzeichnis zu kopieren (`DATA_DIR` zeigt in
@@ -203,6 +212,18 @@ liegen im Image bereit und werden einmalig nachgeladen:
 ```bash
 docker exec -it kumst-30 node scripts/seed.mjs
 ```
+
+## Galerie & Bilder
+
+- Die Startseite zeigt **alle veröffentlichten Fotos** in einem Masonry-Raster
+  (CSS-Spalten, damit die Archivformate erhalten bleiben).
+- Ein Klick öffnet die Lightbox (HTMX-Fragment, mit `←`/`→`/Esc und Deep-Link auf
+  `/galerija/foto/<id>`); ohne JavaScript führt derselbe Link auf eine eigene Seite.
+- Ein Foto ist intern als **WebP** gespeichert (1800 px, Thumbnail 700 px). Die
+  Lightbox verlinkt es zusätzlich als `/media/<id>.jpg`: Wer das Bild in einem neuen
+  Tab öffnet oder per Rechtsklick speichert, bekommt ein gewohntes JPEG. Die
+  JPEG-Fassung wird beim ersten Aufruf serverseitig mit `sharp` erzeugt und in
+  `data/uploads` zwischengespeichert.
 
 ## Design
 

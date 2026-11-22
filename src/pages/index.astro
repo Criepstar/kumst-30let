@@ -2,27 +2,22 @@
 import Base from '../layouts/Base.astro';
 import BiText from '../components/BiText.astro';
 import SectionHeading from '../components/SectionHeading.astro';
-import Timeline from '../components/Timeline.astro';
 import PhotoGrid from '../components/PhotoGrid.astro';
-import { ABOUT, DOWNLOAD, GALLERY, HERO } from '../lib/content';
+import { DOWNLOAD, GALLERY, HERO } from '../lib/content';
 import { SITE, u } from '../lib/site';
 import { listPhotos } from '../lib/gallery';
 
 const photos = await listPhotos(true);
-const teaser = photos.slice(0, 6);
 ---
 
 <Base>
   <!-- ------------------------------------------------------------ Hero -->
   <section class="relative overflow-hidden bg-wine text-cream">
-    <div
-      class="pointer-events-none absolute inset-0 opacity-[0.06] bricks-cream"
-      aria-hidden="true"
-    >
+    <div class="pointer-events-none absolute inset-0 opacity-[0.06] bricks-cream" aria-hidden="true">
     </div>
 
     <div
-      class="shell relative grid items-center gap-10 pt-12 pb-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14 lg:pt-16 lg:pb-24"
+      class="shell relative grid items-center gap-7 pt-8 pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:gap-14 lg:pt-12 lg:pb-14"
     >
       <div class="relative z-10">
         <div class="flex items-center gap-3">
@@ -30,29 +25,34 @@ const teaser = photos.slice(0, 6);
           <p class="label text-sage">{HERO.years}</p>
         </div>
 
-        <h1 class="mt-6 text-cream">
-          <span class="block text-[clamp(3.25rem,9vw,6.5rem)] leading-[0.82]">{HERO.titleTop}</span>
+        <h1 class="mt-4 text-cream lg:mt-5">
+          <span class="block text-[clamp(2.5rem,7.2vw,5rem)] leading-[0.84]">{HERO.titleTop}</span>
           <span
-            class="mt-1 block text-[clamp(3.25rem,9vw,6.5rem)] leading-[0.82] text-transparent"
+            class="mt-1 block text-[clamp(2.5rem,7.2vw,5rem)] leading-[0.84] text-transparent"
             style="-webkit-text-stroke: 1.5px var(--color-cream);"
             lang="de">{HERO.titleBottom}</span
           >
         </h1>
 
-        <p class="mt-7 inline-flex items-center gap-2 border border-cream/40 px-3 py-1.5">
+        <p class="mt-5 inline-flex items-center gap-2 border border-cream/40 px-3 py-1.5 lg:mt-6">
           <span class="label text-cream">{HERO.bigSl}</span>
           <span class="label text-cream/35">/</span>
           <span class="label text-rose" lang="de">{HERO.bigDe}</span>
         </p>
 
-        <BiText sl={HERO.leadSl} de={HERO.leadDe} tone="dark" size="lead" class="mt-8 max-w-xl" />
+        <BiText sl={HERO.leadSl} de={HERO.leadDe} tone="dark" size="lead" class="mt-5 max-w-xl lg:mt-6" />
 
-        <div class="mt-9 flex flex-wrap items-center gap-3">
-          <a class="btn btn-cream" href={u('/galerija')}>
+        <div class="mt-7 flex flex-wrap items-center gap-3 lg:mt-8">
+          <a class="btn btn-cream" href="#galerija">
             {HERO.ctaGallery.sl} / {HERO.ctaGallery.de}
-            <span aria-hidden="true">→</span>
+            <span aria-hidden="true">↓</span>
           </a>
-          <a class="btn border-cream/60 text-cream hover:bg-cream hover:text-wine" href="#brosura">
+          <a
+            class="btn hidden border-cream/60 text-cream hover:bg-cream hover:text-wine sm:inline-flex"
+            href={u(SITE.brochure.file)}
+            download
+            type="application/pdf"
+          >
             {HERO.ctaBrochure.sl} / {HERO.ctaBrochure.de}
             <span aria-hidden="true">↓</span>
           </a>
@@ -61,11 +61,11 @@ const teaser = photos.slice(0, 6);
 
       <div class="relative">
         <img
-          src={u('/brand/kumst-illustration.svg')}
+          src={u('/brand/kumst-hero.svg')}
           alt="Ilustracija kulturnega doma KUMST / Illustration des Kulturhauses KUMST"
-          width="604"
-          height="708"
-          class="mx-auto h-auto w-full max-h-[68vh] object-contain"
+          width="590"
+          height="500"
+          class="mx-auto h-auto w-full max-h-[32vh] object-contain sm:max-h-[42vh] lg:max-h-[52vh]"
           fetchpriority="high"
         />
       </div>
@@ -74,125 +74,68 @@ const teaser = photos.slice(0, 6);
     <div class="relative h-1.5 w-full bg-sage" aria-hidden="true"></div>
   </section>
 
-  <!-- ------------------------------------------------- Zgodba / Geschichte -->
-  <section id="zgodba" class="section scroll-mt-20">
+  <!-- ---------------------------------------------------------- Galerie -->
+  <section id="galerija" class="scroll-mt-2 pt-12 pb-16 sm:pt-16 sm:pb-20">
     <div class="shell">
-      <div class="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-20">
-        <div>
-          <SectionHeading label={ABOUT.label} sl={ABOUT.heading.sl} de={ABOUT.heading.de} />
-          <BiText sl={ABOUT.sl} de={ABOUT.de} size="base" class="mt-8 max-w-2xl" rule />
-        </div>
-
-        <aside class="relative self-start border border-wine/25 bg-wine px-7 py-8 text-cream sm:px-9 sm:py-10">
-          <span
-            class="absolute -top-px -right-px h-10 w-10 border-t border-r border-magenta"
-            aria-hidden="true"></span>
-          <p class="label text-sage">KUMST v številkah / in Zahlen</p>
-          <dl class="mt-6 space-y-5">
-            {
-              ABOUT.facts.map((fact) => (
-                <div class="border-t border-cream/20 pt-4">
-                  <dt class="font-display text-2xl leading-none font-black tracking-[-0.02em] text-cream">
-                    {fact.k}
-                  </dt>
-                  <dd class="mt-1.5 text-[0.9375rem] leading-snug text-cream/90" lang="sl">
-                    {fact.sl}
-                  </dd>
-                  <dd class="text-[0.875rem] leading-snug text-rose" lang="de">
-                    {fact.de}
-                  </dd>
-                </div>
-              ))
-            }
-          </dl>
-        </aside>
-      </div>
-
-      <!-- Zeitleiste -->
-      <div class="mt-16 lg:mt-24">
-        <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <p class="label text-sage-deep">
-            Časovnica <span class="text-wine/35">/</span> Zeitleiste
-          </p>
-          <p class="max-w-md text-[0.9375rem] leading-snug text-wine/80" lang="de">
-            1912 bis 1996: sieben Stationen, die das Haus geprägt haben – vom Vereinshaus
-            über Brand und Wiederaufbau bis zur Eröffnung des KUMST.
-          </p>
-        </div>
-        <Timeline />
-      </div>
-    </div>
-  </section>
-
-  <!-- -------------------------------------------------------- Galerie-Teaser -->
-  <section class="section border-t border-wine/15 bg-cream-deep/45">
-    <div class="shell">
-      <div class="flex flex-wrap items-end justify-between gap-6">
+      <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
         <SectionHeading label={GALLERY.label} sl={GALLERY.heading.sl} de={GALLERY.heading.de} />
-        <a class="btn btn-ghost" href={u('/galerija')}>
-          {GALLERY.showAll.sl} / {GALLERY.showAll.de}
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
-
-      {
-        teaser.length > 0 ? (
-          <div class="mt-10">
-            <PhotoGrid photos={teaser} />
-          </div>
-        ) : (
-          <div class="mt-10 border border-dashed border-wine/30 px-6 py-16 text-center">
-            <p class="text-ink/80" lang="sl">
-              {GALLERY.emptySl}
-            </p>
-            <p class="mt-2 text-wine/80" lang="de">
-              {GALLERY.emptyDe}
-            </p>
-          </div>
-        )
-      }
-
-      <div class="mt-4 flex items-center justify-between gap-4 border-t border-wine/15 pt-4">
-        <p class="label text-ink/60">
+        <p class="label pb-1 text-ink/60">
           {GALLERY.countSl(photos.length)} <span class="text-wine/35">/</span>
           {GALLERY.countDe(photos.length)}
         </p>
-        <p class="label text-ink/40">Arhiv SPD Trta</p>
+      </div>
+
+      <BiText sl={GALLERY.introSl} de={GALLERY.introDe} class="mt-6 max-w-2xl" />
+
+      <div class="mt-10 sm:mt-12">
+        {
+          photos.length > 0 ? (
+            <PhotoGrid photos={photos} />
+          ) : (
+            <div class="border border-dashed border-wine/30 px-6 py-20 text-center">
+              <p class="text-ink/80" lang="sl">
+                {GALLERY.emptySl}
+              </p>
+              <p class="mt-2 text-wine/80" lang="de">
+                {GALLERY.emptyDe}
+              </p>
+            </div>
+          )
+        }
+      </div>
+
+      <div class="mt-2 flex items-center justify-between gap-4 border-t border-wine/15 pt-4">
+        <p class="label text-ink/45">{GALLERY.archive}</p>
+        <p class="label text-ink/40">{HERO.years}</p>
       </div>
     </div>
   </section>
 
-  <!-- ----------------------------------------------------------- Broschüre -->
-  <section id="brosura" class="relative overflow-hidden bg-wine text-cream scroll-mt-16">
-    <div class="shell relative grid items-center gap-12 py-16 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-24">
-      <div class="relative mx-auto w-full max-w-[280px] lg:max-w-none">
-        <div class="absolute -inset-3 border border-cream/25" aria-hidden="true"></div>
-        <img
-          src={u('/brand/broschure-cover.webp')}
-          alt="Naslovnica brošure 30 let KUMST / Titelblatt der Broschüre 30 Jahre KUMST"
-          width="900"
-          height="1272"
-          loading="lazy"
-          class="relative w-full -rotate-[1.2deg] shadow-[0_28px_60px_-24px_rgba(0,0,0,0.65)]"
-        />
+  <!-- ------------------------------------- Broschüre (Download-Hinweis) -->
+  <section id="brosura" class="scroll-mt-2 border-t border-wine/15 bg-cream-deep/50">
+    <div class="shell flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:gap-10 sm:py-12">
+      <div>
+        <p class="label text-sage-deep">{DOWNLOAD.label.sl} / {DOWNLOAD.label.de}</p>
+        <h2 class="mt-3 text-[clamp(1.5rem,2.8vw,2.125rem)] text-ink">
+          {DOWNLOAD.heading.sl}
+          <span lang="de" class="mt-0.5 block text-wine">{DOWNLOAD.heading.de}</span>
+        </h2>
+        <p class="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-ink/85" lang="sl">
+          {DOWNLOAD.lineSl}
+        </p>
+        <p class="max-w-xl text-[0.9375rem] leading-relaxed text-wine/85" lang="de">
+          {DOWNLOAD.lineDe}
+        </p>
       </div>
 
-      <div>
-        <SectionHeading label={DOWNLOAD.label} sl={DOWNLOAD.heading.sl} de={DOWNLOAD.heading.de} tone="dark" />
-        <BiText sl={DOWNLOAD.sl} de={DOWNLOAD.de} tone="dark" class="mt-8 max-w-xl" />
-
-        <div class="mt-9 flex flex-wrap items-center gap-3">
-          <a
-            class="btn btn-cream"
-            href={u(SITE.brochure.file)}
-            download
-            type="application/pdf"
-          >
+      <div class="shrink-0">
+        <div class="flex flex-wrap items-center gap-3">
+          <a class="btn btn-wine" href={u(SITE.brochure.file)} download type="application/pdf">
             {DOWNLOAD.cta.sl} / {DOWNLOAD.cta.de}
             <span aria-hidden="true">↓</span>
           </a>
           <a
-            class="btn border-cream/50 text-cream hover:bg-cream hover:text-wine"
+            class="btn btn-ghost"
             href={u(SITE.brochure.file)}
             target="_blank"
             rel="noopener"
@@ -200,17 +143,14 @@ const teaser = photos.slice(0, 6);
             {DOWNLOAD.ctaOpen.sl} / {DOWNLOAD.ctaOpen.de}
           </a>
         </div>
-
-        <p class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.8125rem] text-cream/70">
+        <p class="mt-3 flex flex-wrap items-center gap-x-2 text-[0.8125rem] leading-relaxed text-ink/60">
           <span>{SITE.brochure.sizeLabel}</span>
-          <span class="text-cream/30" aria-hidden="true">·</span>
+          <span class="text-wine/30" aria-hidden="true">·</span>
           <span>{DOWNLOAD.hintSl}</span>
-          <span class="text-cream/30" aria-hidden="true">·</span>
+          <span class="text-wine/30" aria-hidden="true">/</span>
           <span lang="de">{DOWNLOAD.hintDe}</span>
         </p>
       </div>
     </div>
-
-    <div class="h-6 w-full opacity-25 bricks-cream" aria-hidden="true"></div>
   </section>
 </Base>

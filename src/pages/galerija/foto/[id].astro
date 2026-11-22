@@ -5,7 +5,7 @@ import { getPhoto, getNeighbours } from '../../../lib/gallery';
 import { isLoggedIn } from '../../../lib/auth';
 import { u } from '../../../lib/site';
 
-const galleryUrl = u('/galerija');
+const galleryUrl = u('/#galerija');
 const id = Astro.params.id ?? '';
 const photo = await getPhoto(id);
 
@@ -39,8 +39,6 @@ const props = {
         <p class="label text-cream">Nicht veröffentlicht – Vorschau / Ni objavljeno</p>
       </div>
     )}
-    <div id="lightbox-slot">
-      <Lightbox {...props} />
-    </div>
+    <Lightbox {...props} />
   </Base>
 )}

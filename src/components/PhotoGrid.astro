@@ -1,14 +1,15 @@
 ---
 import type { Photo } from '../lib/gallery';
+import { GALLERY } from '../lib/content';
 import { mediaUrl, u } from '../lib/site';
 
 interface Props {
   photos: Photo[];
-  /** URL der Galerie – wird zum Zurücksetzen der Adresse im Lightbox-Skript genutzt */
+  /** Adresse, zu der die Lightbox beim Schließen zurückkehrt (One-Pager: /#galerija) */
   galleryUrl?: string;
 }
 
-const { photos, galleryUrl = u('/galerija') } = Astro.props;
+const { photos, galleryUrl = u('/#galerija') } = Astro.props;
 
 const altFor = (photo: Photo) =>
   photo.captionSl || photo.captionDe || 'Arhivska fotografija / Archivfoto des Vereins Trta';
@@ -25,6 +26,7 @@ const altFor = (photo: Photo) =>
         hx-swap="innerHTML"
         hx-push-url="true"
         data-gallery-url={galleryUrl}
+        title={`${GALLERY.zoomHint.sl} / ${GALLERY.zoomHint.de}`}
         aria-label={`${altFor(photo)} – fotografija ${index + 1}`}
       >
         <img

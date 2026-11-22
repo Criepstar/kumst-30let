@@ -48,3 +48,11 @@ export const SITE = {
 export function mediaUrl(id: string, variant: 'full' | 'thumb' = 'full'): string {
   return u(`/media/${id}${variant === 'thumb' ? '-t' : ''}.webp`);
 }
+
+/**
+ * Adresse der JPEG-Fassung – wird bei Bedarf serverseitig erzeugt.
+ * Damit liefert „in neuem Tab öffnen“ ein echtes .jpg statt eines .webp.
+ */
+export function photoFileUrl(id: string): string {
+  return u(`/media/${id}.jpg`);
+}
