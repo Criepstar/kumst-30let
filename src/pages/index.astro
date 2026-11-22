@@ -26,11 +26,12 @@ const photos = await listPhotos(true);
     >
       <h1 class="sr-only">{HERO.titleTop} / {HERO.titleBottom} KUMST – Žitara vas / Sittersdorf</h1>
 
-      <div class="flex items-center gap-3 lg:col-start-1 lg:row-start-1 lg:justify-self-start">
-        <span class="block h-px w-8 bg-rose/50" aria-hidden="true"></span>
-        <p class="label text-rose">{HERO.years}</p>
-        <span class="block h-px w-8 bg-rose/50" aria-hidden="true"></span>
-      </div>
+      <p class="years text-rose lg:col-start-1 lg:row-start-1 lg:justify-self-start">
+        <span>{HERO.yearsFrom}</span>
+        <span class="sr-only">–</span>
+        <span class="years-rule" aria-hidden="true"></span>
+        <span>{HERO.yearsTo}</span>
+      </p>
 
       <img
         src={u('/brand/kumst-hero.svg')}
@@ -98,7 +99,7 @@ const photos = await listPhotos(true);
 
       <div class="mt-2 flex items-center justify-between gap-4 border-t border-wine/15 pt-4">
         <p class="label text-ink/45">{GALLERY.archive}</p>
-        <p class="label text-ink/40">1907 - 2026</p>
+        <p class="label text-ink/40 tabular-nums">1907 – 2026</p>
       </div>
     </div>
   </section>
