@@ -1,39 +1,46 @@
 ---
-import { KOLOFON, FOOTER, DOWNLOAD } from '../lib/content';
+import { KOLOFON } from '../lib/content';
 import { SITE, u } from '../lib/site';
 
 const year = new Date().getFullYear();
 ---
 
 <!--
-  Kolofon/Impressum und Fußzeile sind eine gemeinsame Sektion:
-  Angaben zur Broschüre, Kontakt, Fördergeber und Copyright an einem Ort.
+  Kolofon/Impressum und Fußzeile sind eine gemeinsame Sektion: Kontakt,
+  Fördergeber und Copyright an einem Ort. Die Kontaktangaben stehen als
+  Spalten im Footer – kein eigener Kasten, keine leere zweite Spalte.
 -->
 <footer id="kolofon" class="border-t border-wine/20 bg-cream-deep/45">
-  <div class="shell py-14 sm:py-16">
-    <div class="grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:gap-20">
-      <aside class="self-start space-y-8">
-        <div class="border border-wine/25 px-7 py-8">
-          <p class="label text-sage-deep">
-            {KOLOFON.contact.sl} <span class="text-wine/35">/</span> {KOLOFON.contact.de}
-          </p>
-          <address class="mt-5 space-y-1 text-[0.9375rem] leading-relaxed not-italic text-ink">
-            <p class="font-semibold">{SITE.org.nameSl}</p>
-            <p lang="de" class="text-wine">{SITE.org.nameDe}</p>
-            <p class="pt-3">{SITE.org.street}</p>
-            <p>{SITE.org.city}</p>
-            <p>{SITE.org.country}</p>
-            <p class="pt-3">
-              <a class="link-accent" href={`mailto:${SITE.org.mail}`}>{SITE.org.mail}</a>
-            </p>
-            <p>
-              <a class="link-accent" href={`https://${SITE.org.web}`} rel="noopener">{SITE.org.web}</a>
-            </p>
-          </address>
-        </div>
-      </aside>
+  <div class="shell py-12 sm:py-14">
+    <p class="label text-sage-deep">
+      {KOLOFON.contact.sl} <span class="text-wine/35">/</span> {KOLOFON.contact.de}
+    </p>
+
+    <div
+      class="mt-5 grid gap-x-12 gap-y-6 text-[0.9375rem] leading-relaxed text-ink sm:grid-cols-2 lg:grid-cols-3"
+    >
+      <div>
+        <p class="font-semibold">{SITE.org.nameSl}</p>
+        <p lang="de" class="text-wine">{SITE.org.nameDe}</p>
+      </div>
+
+      <address class="not-italic">
+        <p>{SITE.org.street}</p>
+        <p>{SITE.org.city}</p>
+        <p>{SITE.org.country}</p>
+      </address>
+
+      <div class="space-y-1 sm:col-span-2 lg:col-span-1">
+        <p>
+          <a class="link-accent" href={`mailto:${SITE.org.mail}`}>{SITE.org.mail}</a>
+        </p>
+        <p>
+          <a class="link-accent" href={`https://${SITE.org.web}`} rel="noopener">{SITE.org.web}</a>
+        </p>
+      </div>
     </div>
   </div>
+
   <!-- Fördergeber – wie die Seitenleiste der Broschüre -->
   <div class="bg-wine text-cream">
     <div class="shell flex flex-col gap-7 py-8 sm:flex-row sm:items-center sm:justify-between">

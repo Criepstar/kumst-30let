@@ -9,8 +9,6 @@
 export type Bi = { sl: string; de: string };
 
 export const HERO = {
-  yearsFrom: '1996',
-  yearsTo: '2026',
   titleTop: '30 let',
   titleBottom: '30 Jahre',
   leadSl: 'Trideset let kulturnega doma KUMST v Žitari vasi – v fotografijah iz arhiva društva Trta.',

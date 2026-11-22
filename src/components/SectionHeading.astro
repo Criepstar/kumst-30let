@@ -1,15 +1,12 @@
 ---
-import type { Bi } from '../lib/content';
-
 interface Props {
-  label: Bi;
   sl: string;
   de: string;
   tone?: 'light' | 'dark';
   size?: 'md' | 'lg';
 }
 
-const { label, sl, de, tone = 'light', size = 'md' } = Astro.props;
+const { sl, de, tone = 'light', size = 'md' } = Astro.props;
 const isDark = tone === 'dark';
 ---
 

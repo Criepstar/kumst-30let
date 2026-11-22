@@ -115,27 +115,6 @@
     line-height: 1.4;
   }
 
-  /* Jahreszahlen: Ziffern enger gesperrt als die Labels, der Zeitraum wird
-     als Haarlinie gesetzt – kein Bindestrich-Glyph zwischen den Zahlen. */
-  .years {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    line-height: 1.4;
-    font-variant-numeric: tabular-nums;
-  }
-  .years-rule {
-    display: block;
-    width: 1.5rem;
-    height: 1px;
-    background: currentColor;
-    opacity: 0.5;
-  }
-
   .hairline {
     border-color: color-mix(in oklab, var(--color-wine) 26%, transparent);
   }
