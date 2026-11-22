@@ -1,0 +1,30 @@
+{
+  "name": "kumst-30-let",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "KUMST – 30 let / 30 Jahre. Bildergalerie und Broschüren-Download zur Jubiläumsbroschüre des SPD Trta.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
+    "check": "astro check",
+    "seed": "node ./scripts/seed.mjs"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.14",
+    "@fontsource-variable/mulish": "^5.3.0",
+    "@fontsource/poppins": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.5",
+    "astro": "^7.4.13",
+    "htmx.org": "^2.0.11",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/node": "^26.6.6",
+    "typescript": "^6.0.3"
+  }
+}

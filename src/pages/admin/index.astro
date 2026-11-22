@@ -1,0 +1,199 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdminGrid from '../../components/admin/AdminGrid.astro';
+import { listPhotos } from '../../lib/gallery';
+import { usesFallbackPassword } from '../../lib/auth';
+import { u } from '../../lib/site';
+
+const photos = await listPhotos(false);
+const published = photos.filter((p) => p.published).length;
+const fallback = usesFallbackPassword();
+---
+
+<Base title="Uredništvo / Redaktion" noindex bare>
+  <div class="min-h-screen bg-cream">
+    <!-- Kopfleiste -->
+    <header class="sticky top-0 z-30 bg-wine text-cream">
+      <div class="mx-auto flex max-w-[90rem] flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-8">
+        <a
+          class="flex items-baseline gap-2.5 font-display text-lg leading-none font-black tracking-[-0.02em] uppercase"
+          href={u('/admin')}
+        >
+          KUMST <span class="text-cream/50">·</span>
+          <span class="label text-cream/70">Uredništvo / Redaktion</span>
+        </a>
+
+        <p id="galerie-stevec" class="label ml-auto text-cream/60">
+          {published} objavljenih <span class="text-cream/30">/</span> {photos.length} gesamt
+        </p>
+
+        <span id="toast-indicator" class="htmx-indicator label text-sage">… shranjujem / lädt</span>
+
+        <div class="flex items-center gap-3">
+          <a
+            class="label whitespace-nowrap text-cream/80 hover:text-magenta"
+            href={u('/galerija')}
+            target="_blank"
+            rel="noopener"
+          >
+            Spletna stran <span aria-hidden="true">↗</span>
+          </a>
+          <form method="post" action={u('/api/admin/odjava')}>
+            <button type="submit" class="btn border-cream/40 px-3 py-1.5 text-[0.625rem] text-cream hover:bg-cream hover:text-wine">
+              Odjava / Abmelden
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-[90rem] px-4 py-8 sm:px-8">
+      {
+        fallback && (
+          <p class="mb-6 border border-magenta/40 bg-magenta/5 px-4 py-3 text-[0.875rem] text-magenta">
+            <strong>Achtung:</strong> Es ist noch kein <code>ADMIN_PASSWORD</code> gesetzt – das
+            Standardpasswort lautet <code>kumst30</code>. Bitte in der <code>.env</code> ändern.
+          </p>
+        )
+      }
+
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-start">
+        <!-- Upload -->
+        <section class="border border-wine/25 bg-cream-soft p-5 lg:sticky lg:top-20">
+          <h1 class="font-display text-xl leading-none font-black text-wine uppercase">
+            Naloži fotografije
+          </h1>
+          <p lang="de" class="mt-1 text-[0.875rem] text-wine/80">Fotos hochladen</p>
+
+          <form
+            id="upload-form"
+            method="post"
+            action={u('/api/admin/foto/hochladen')}
+            enctype="multipart/form-data"
+            hx-post={u('/api/admin/foto/hochladen')}
+            hx-encoding="multipart/form-data"
+            hx-target="#meldung"
+            hx-swap="innerHTML"
+            hx-indicator="#toast-indicator"
+            class="mt-5 space-y-3"
+          >
+            <label
+              id="dropzone"
+              class="flex cursor-pointer flex-col items-center justify-center gap-2 border border-dashed border-sage bg-cream px-4 py-8 text-center transition-colors hover:border-sage-deep hover:bg-cream-deep/40"
+            >
+              <input
+                id="foto-input"
+                type="file"
+                name="fotos"
+                accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/tiff"
+                multiple
+                required
+                class="sr-only"
+              />
+              <span class="font-display text-2xl leading-none font-black text-sage">＋</span>
+              <span class="label text-ink">Izberi ali povleci sem</span>
+              <span class="label text-wine/70">Auswählen oder hierher ziehen</span>
+              <span id="datei-info" class="mt-1 text-[0.75rem] text-ink/60"></span>
+            </label>
+
+            <div class="h-1 w-full overflow-hidden bg-wine/15">
+              <div id="fortschritt" class="h-full w-0 bg-sage transition-[width] duration-150"></div>
+            </div>
+
+            <button type="submit" class="btn btn-wine w-full justify-center">
+              Naloži / Hochladen
+            </button>
+
+            <p class="text-[0.75rem] leading-relaxed text-ink/60">
+              JPG, PNG, WebP, HEIC · max. 30 MB pro Foto. Fotos werden automatisch auf 1800 px
+              verkleinert und als WebP gespeichert.
+            </p>
+          </form>
+        </section>
+
+        <!-- Galerie -->
+        <section>
+          <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 class="font-display text-xl leading-none font-black text-wine uppercase">Galerija</h2>
+              <p class="mt-1 text-[0.875rem] text-wine/80">
+                Bildtexte bearbeiten, Reihenfolge und Sichtbarkeit steuern
+              </p>
+            </div>
+            <a class="btn btn-ghost px-3 py-1.5 text-[0.625rem]" href={u('/admin/mreza')} target="_blank">
+              Mreža neu laden / Grid neu laden
+            </a>
+          </div>
+
+          <AdminGrid photos={photos} />
+        </section>
+      </div>
+    </main>
+
+    <!-- Toast -->
+    <div
+      id="meldung"
+      aria-live="polite"
+      class="pointer-events-none fixed right-4 bottom-4 z-50 max-w-sm space-y-2 [&>*]:pointer-events-auto"
+    >
+    </div>
+
+    <script>
+      const form = document.getElementById('upload-form') as HTMLFormElement | null;
+      const input = document.getElementById('foto-input') as HTMLInputElement | null;
+      const dropzone = document.getElementById('dropzone');
+      const progress = document.getElementById('fortschritt');
+      const info = document.getElementById('datei-info');
+
+      function showCount() {
+        if (!input || !info) return;
+        const count = input.files?.length ?? 0;
+        info.textContent = count === 0 ? '' : `${count} ${count === 1 ? 'Datei' : 'Dateien'} ausgewählt`;
+      }
+
+      input?.addEventListener('change', showCount);
+
+      if (dropzone && input) {
+        ['dragenter', 'dragover'].forEach((type) =>
+          dropzone.addEventListener(type, (event) => {
+            event.preventDefault();
+            dropzone.classList.add('border-magenta', 'bg-cream-deep/60');
+          }),
+        );
+        ['dragleave', 'drop'].forEach((type) =>
+          dropzone.addEventListener(type, (event) => {
+            event.preventDefault();
+            dropzone.classList.remove('border-magenta', 'bg-cream-deep/60');
+          }),
+        );
+        dropzone.addEventListener('drop', (event) => {
+          const dropped = (event as DragEvent).dataTransfer;
+          if (!dropped?.files?.length) return;
+          input.files = dropped.files;
+          showCount();
+        });
+      }
+
+      form?.addEventListener('htmx:xhr:progress', (event) => {
+        const detail = (event as CustomEvent).detail;
+        if (!progress || !detail?.total) return;
+        progress.style.width = `${Math.round((detail.loaded / detail.total) * 100)}%`;
+      });
+
+      form?.addEventListener('htmx:beforeRequest', () => {
+        if (progress) progress.style.width = '3%';
+      });
+
+      form?.addEventListener('htmx:afterRequest', () => {
+        if (progress) {
+          progress.style.width = '100%';
+          setTimeout(() => {
+            if (progress) progress.style.width = '0%';
+          }, 700);
+        }
+        form.reset();
+        if (info) info.textContent = '';
+      });
+    </script>
+  </div>
+</Base>

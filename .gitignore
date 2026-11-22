@@ -1,0 +1,21 @@
+# Abhängigkeiten
+node_modules/
+
+# Build
+dist/
+.astro/
+
+# Laufzeitdaten (Galerie, Uploads, Session-Secret)
+data/
+
+# Umgebung
+.env
+.env.local
+
+# Systemkram
+.DS_Store
+*.log
+
+# Quellmaterial (Druck-PDF und Screenshots der Vorlage)
+028_Trta_Folder-30-let-KUMST_preview_v2.pdf
+Bildschirmfoto *.png

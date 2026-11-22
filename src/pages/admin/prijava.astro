@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import { u } from '../../lib/site';
+import { isLoggedIn } from '../../lib/auth';
+
+if (await isLoggedIn(Astro.cookies)) {
+  return Astro.redirect(u('/admin'), 302);
+}
+
+const weiter = Astro.url.searchParams.get('weiter') || u('/admin');
+const fehler = Astro.url.searchParams.get('napaka') === '1';
+---
+
+<Base title="Prijava / Anmeldung" noindex bare>
+  <div class="flex min-h-screen items-center justify-center px-4 py-16">
+    <div class="w-full max-w-md">
+      <div class="bg-wine px-8 py-10 text-cream sm:px-10">
+        <p class="font-display text-4xl leading-none font-black tracking-[-0.02em] uppercase">KUMST</p>
+        <p class="label mt-3 text-sage">30 let / 30 Jahre</p>
+        <h1 class="mt-8 text-2xl leading-none text-cream">Uredništvo</h1>
+        <p lang="de" class="mt-2 font-display text-base font-black uppercase tracking-[0.02em] text-rose">
+          Redaktionsbereich
+        </p>
+
+        <form
+          method="post"
+          action={u('/api/admin/prijava')}
+          hx-post={u('/api/admin/prijava')}
+          hx-target="#meldung"
+          hx-swap="innerHTML"
+          hx-indicator="#toast-indicator"
+          class="mt-8 space-y-4"
+        >
+          <input type="hidden" name="weiter" value={weiter} />
+          <label class="block">
+            <span class="label text-cream/70">Geslo / Passwort</span>
+            <input
+              type="password"
+              name="geslo"
+              required
+              autocomplete="current-password"
+              autofocus
+              class="mt-1.5 w-full border border-cream/35 bg-wine-deep px-3 py-2.5 text-[0.9375rem] text-cream placeholder-cream/30 focus:border-magenta focus:outline-none"
+              placeholder="••••••••"
+            />
+          </label>
+
+          <button type="submit" class="btn btn-cream w-full justify-center">
+            Prijava / Anmelden <span aria-hidden="true">→</span>
+          </button>
+
+          <span id="toast-indicator" class="htmx-indicator label text-sage">… preverjam</span>
+        </form>
+
+        <div id="meldung" aria-live="polite" class="mt-4"></div>
+
+        {
+          fehler && (
+            <p class="mt-4 text-[0.875rem] text-rose">
+              Napačno geslo. / Falsches Passwort.
+            </p>
+          )
+        }
+      </div>
+
+      <div class="mt-6 flex items-center justify-between">
+        <a class="label text-ink/60 hover:text-magenta" href={u('/')}>← KUMST</a>
+        <p class="label text-ink/40">Samo za uredništvo / nur Redaktion</p>
+      </div>
+    </div>
+  </div>
+</Base>

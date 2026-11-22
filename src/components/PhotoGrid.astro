@@ -1,0 +1,46 @@
+---
+import type { Photo } from '../lib/gallery';
+import { mediaUrl, u } from '../lib/site';
+
+interface Props {
+  photos: Photo[];
+  /** URL der Galerie – wird zum Zurücksetzen der Adresse im Lightbox-Skript genutzt */
+  galleryUrl?: string;
+}
+
+const { photos, galleryUrl = u('/galerija') } = Astro.props;
+
+const altFor = (photo: Photo) =>
+  photo.captionSl || photo.captionDe || 'Arhivska fotografija / Archivfoto des Vereins Trta';
+---
+
+<div class="columns-1 gap-5 sm:columns-2 lg:columns-3">
+  {
+    photos.map((photo, index) => (
+      <a
+        class="thumb group"
+        href={u(`/galerija/foto/${photo.id}`)}
+        hx-get={u(`/galerija/foto/${photo.id}`)}
+        hx-target="#lightbox-slot"
+        hx-swap="innerHTML"
+        hx-push-url="true"
+        data-gallery-url={galleryUrl}
+        aria-label={`${altFor(photo)} – fotografija ${index + 1}`}
+      >
+        <img
+          src={mediaUrl(photo.id, 'thumb')}
+          alt={altFor(photo)}
+          width={photo.width}
+          height={photo.height}
+          loading={index < 3 ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+        {(photo.captionSl || photo.captionDe) && (
+          <span class="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-wine/90 px-3 py-2 text-[0.75rem] leading-snug tracking-[0.02em] text-cream opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100">
+            {photo.captionSl || photo.captionDe}
+          </span>
+        )}
+      </a>
+    ))
+  }
+</div>

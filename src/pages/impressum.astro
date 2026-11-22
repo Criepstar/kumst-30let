@@ -1,0 +1,6 @@
+---
+import { u } from '../lib/site';
+
+// Kurz-URL für deutschsprachige Besucher:innen: /impressum → /kolofon
+return Astro.redirect(u('/kolofon'), 301);
+---

@@ -1,0 +1,124 @@
+---
+import type { Photo } from '../lib/gallery';
+import { GALLERY } from '../lib/content';
+import { mediaUrl, u } from '../lib/site';
+
+interface Props {
+  photo: Photo;
+  prev?: Photo;
+  next?: Photo;
+  index: number;
+  total: number;
+  galleryUrl: string;
+}
+
+const { photo, prev, next, index, total, galleryUrl } = Astro.props;
+const caption = photo.captionSl || photo.captionDe;
+const photoHref = (id: string) => u(`/galerija/foto/${id}`);
+---
+
+<div
+  id="lightbox"
+  class="fixed inset-0 z-50 bg-wine-deep text-cream"
+  data-gallery-url={galleryUrl}
+  role="dialog"
+  aria-modal="true"
+  aria-label={`Fotografija ${index + 1} od ${total} / Foto ${index + 1} von ${total}`}
+>
+  <div class="absolute inset-0" data-lb-close aria-hidden="true"></div>
+
+  <div class="pointer-events-none relative flex h-full flex-col">
+    <div class="pointer-events-auto flex items-center justify-between gap-4 px-4 py-3 sm:px-8">
+      <p class="label text-cream/70">
+        {index + 1} <span class="text-cream/35">/</span> {total}
+      </p>
+
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        {
+          prev && (
+            <a
+              class="btn border-cream/40 px-3 py-2 text-cream hover:bg-cream hover:text-wine"
+              href={photoHref(prev.id)}
+              hx-get={photoHref(prev.id)}
+              hx-target="#lightbox-slot"
+              hx-swap="innerHTML"
+              hx-push-url="true"
+              data-lb-prev
+              aria-label="Prejšnja fotografija / Vorheriges Foto"
+            >
+              <span aria-hidden="true">←</span>
+            </a>
+          )
+        }
+        {
+          next && (
+            <a
+              class="btn border-cream/40 px-3 py-2 text-cream hover:bg-cream hover:text-wine"
+              href={photoHref(next.id)}
+              hx-get={photoHref(next.id)}
+              hx-target="#lightbox-slot"
+              hx-swap="innerHTML"
+              hx-push-url="true"
+              data-lb-next
+              aria-label="Naslednja fotografija / Nächstes Foto"
+            >
+              <span aria-hidden="true">→</span>
+            </a>
+          )
+        }
+        <a
+          class="btn border-cream/40 px-3 py-2 text-cream hover:bg-cream hover:text-wine"
+          href={galleryUrl}
+          data-lb-close
+          aria-label="Zapri / Schließen"
+        >
+          <span aria-hidden="true">✕</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="pointer-events-none flex min-h-0 flex-1 flex-col items-center justify-center px-4 pb-6 sm:px-8">
+      <img
+        src={mediaUrl(photo.id, 'full')}
+        alt={caption || 'Arhivska fotografija / Archivfoto des Vereins Trta'}
+        width={photo.width}
+        height={photo.height}
+        class="pointer-events-auto max-h-[calc(100svh-11rem)] w-auto max-w-full object-contain shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)]"
+      />
+
+      <div class="pointer-events-auto mt-5 max-w-2xl text-center">
+        {
+          photo.captionSl && (
+            <p lang="sl" class="text-[0.9375rem] leading-snug text-cream">
+              {photo.captionSl}
+            </p>
+          )
+        }
+        {
+          photo.captionDe && (
+            <p lang="de" class="mt-1 text-[0.9375rem] leading-snug text-rose">
+              {photo.captionDe}
+            </p>
+          )
+        }
+        {
+          !caption && (
+            <p class="text-[0.875rem] text-cream/60">
+              Iz arhiva SPD Trta <span class="text-cream/30">/</span> Aus dem Archiv des Vereins Trta
+            </p>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="pointer-events-auto border-t border-cream/15 px-4 py-3 sm:px-8">
+      <a
+        class="label text-cream/60 transition-colors hover:text-magenta"
+        href={galleryUrl}
+        data-lb-close
+      >
+        ← {GALLERY.back.sl} <span class="text-cream/30">/</span> {GALLERY.back.de}
+      </a>
+    </div>
+  </div>
+</div>

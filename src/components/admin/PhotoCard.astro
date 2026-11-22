@@ -1,0 +1,106 @@
+---
+import type { Photo } from '../../lib/gallery';
+import { mediaUrl, u } from '../../lib/site';
+
+interface Props {
+  photo: Photo;
+  index: number;
+  total: number;
+}
+
+const { photo, index, total } = Astro.props;
+const actionUrl = u(`/api/admin/foto/${photo.id}`);
+const formAttrs = {
+  'hx-post': actionUrl,
+  'hx-target': '#meldung',
+  'hx-swap': 'innerHTML',
+  'hx-indicator': '#toast-indicator',
+};
+---
+
+<article class:list={['border bg-cream-soft', photo.published ? 'border-wine/20' : 'border-dashed border-magenta/60']}>
+  <div class="relative bg-cream-deep">
+    <img
+      src={mediaUrl(photo.id, 'thumb')}
+      alt={photo.captionSl || photo.captionDe || 'Foto'}
+      width={photo.width}
+      height={photo.height}
+      loading="lazy"
+      class:list={['block w-full', !photo.published && 'opacity-55 saturate-50']}
+    />
+    <div class="absolute top-2 left-2 flex flex-wrap gap-1.5">
+      <span class="label bg-wine px-2 py-1 text-cream">{index + 1}/{total}</span>
+      {
+        !photo.published && (
+          <span class="label bg-magenta px-2 py-1 text-cream">neobjavljeno / unveröffentlicht</span>
+        )
+      }
+    </div>
+  </div>
+
+  <form {...formAttrs} class="space-y-2 px-3 py-3">
+    <input type="hidden" name="aktion" value="speichern" />
+    <label class="block">
+      <span class="label text-sage-deep">Napis SL</span>
+      <textarea
+        name="captionSl"
+        rows="2"
+        class="input mt-1 resize-y"
+        placeholder="Opis fotografije v slovenščini"
+        lang="sl">{photo.captionSl}</textarea>
+    </label>
+    <label class="block">
+      <span class="label text-sage-deep">Bildtext DE</span>
+      <textarea
+        name="captionDe"
+        rows="2"
+        class="input mt-1 resize-y"
+        placeholder="Bildbeschreibung auf Deutsch"
+        lang="de">{photo.captionDe}</textarea>
+    </label>
+    <button type="submit" class="btn btn-wine w-full justify-center py-2 text-[0.6875rem]">
+      Shrani / Speichern
+    </button>
+  </form>
+
+  <div class="flex flex-wrap items-center gap-1.5 border-t border-wine/15 px-3 py-2.5">
+    <form {...formAttrs}>
+      <input type="hidden" name="aktion" value="veroeffentlichen" />
+      <button type="submit" class="btn btn-ghost px-2.5 py-1.5 text-[0.625rem]">
+        {photo.published ? 'Skrij / Ausblenden' : 'Objavi / Freigeben'}
+      </button>
+    </form>
+
+    <div class="ml-auto flex items-center gap-1">
+      <form {...formAttrs}>
+        <input type="hidden" name="aktion" value="nach-oben" />
+        <button
+          type="submit"
+          class="btn btn-ghost px-2 py-1.5 text-[0.625rem] disabled:opacity-30"
+          disabled={index === 0}
+          aria-label="Nach vorne"
+        >↑</button>
+      </form>
+      <form {...formAttrs}>
+        <input type="hidden" name="aktion" value="nach-unten" />
+        <button
+          type="submit"
+          class="btn btn-ghost px-2 py-1.5 text-[0.625rem] disabled:opacity-30"
+          disabled={index === total - 1}
+          aria-label="Nach hinten"
+        >↓</button>
+      </form>
+      <form
+        {...formAttrs}
+        hx-confirm="Fotografijo res izbrišem? / Foto wirklich löschen?"
+      >
+        <input type="hidden" name="aktion" value="loeschen" />
+        <button
+          type="submit"
+          class="btn border-magenta/50 px-2 py-1.5 text-[0.625rem] text-magenta hover:bg-magenta hover:text-cream"
+          aria-label="Löschen"
+        >✕</button>
+      </form>
+    </div>
+  </div>
+</article>

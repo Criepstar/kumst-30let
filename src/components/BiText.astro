@@ -1,0 +1,40 @@
+---
+/**
+ * Zweisprachiger Absatz: Slowenisch zuerst (Tintengrün), Deutsch danach (Weinrot).
+ * `tone="dark"` für Abschnitte mit weinrotem Hintergrund (dort Creme und Altrosa).
+ */
+interface Props {
+  sl: string;
+  de: string;
+  tone?: 'light' | 'dark';
+  size?: 'sm' | 'base' | 'lead';
+  class?: string;
+  rule?: boolean;
+}
+
+const { sl, de, tone = 'light', size = 'base', class: klass = '', rule = false } = Astro.props;
+
+const sizes = {
+  sm: 'text-[0.9375rem] leading-[1.6]',
+  base: 'text-[1.0625rem] leading-[1.65]',
+  lead: 'text-[1.125rem] leading-[1.6] sm:text-[1.25rem]',
+};
+
+const slColor = tone === 'dark' ? 'text-cream' : 'text-ink';
+const deColor = tone === 'dark' ? 'text-rose' : 'text-wine';
+---
+
+<div class:list={['space-y-3', klass]}>
+  <p lang="sl" class:list={[sizes[size], slColor]}>{sl}</p>
+  <p
+    lang="de"
+    class:list={[
+      sizes[size],
+      deColor,
+      rule && 'border-t pt-3',
+      rule && (tone === 'dark' ? 'border-cream/25' : 'border-wine/20'),
+    ]}
+  >
+    {de}
+  </p>
+</div>

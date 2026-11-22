@@ -1,0 +1,32 @@
+---
+import PhotoCard from './PhotoCard.astro';
+import type { Photo } from '../../lib/gallery';
+import { u } from '../../lib/site';
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+---
+
+<div
+  id="galerie-mreza"
+  class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
+  hx-get={u('/admin/mreza')}
+  hx-trigger="galerie-geaendert from:body"
+  hx-swap="outerHTML"
+>
+  {
+    photos.map((photo, index) => (
+      <PhotoCard photo={photo} index={index} total={photos.length} />
+    ))
+  }
+  {
+    photos.length === 0 && (
+      <p class="col-span-full border border-dashed border-wine/30 px-6 py-16 text-center text-[0.9375rem] text-ink/70">
+        Še ni fotografij. Naložite prvo zgoraj. / Noch keine Fotos – laden Sie oben das erste hoch.
+      </p>
+    )
+  }
+</div>

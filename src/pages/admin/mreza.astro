@@ -1,0 +1,14 @@
+---
+import AdminGrid from '../../components/admin/AdminGrid.astro';
+import { listPhotos } from '../../lib/gallery';
+
+const photos = await listPhotos(false);
+const published = photos.filter((p) => p.published).length;
+---
+
+<AdminGrid photos={photos} />
+
+<!-- Out-of-band: aktualisiert den Zähler in der Kopfleiste der Admin-Seite -->
+<p hx-swap-oob="innerHTML:#galerie-stevec" class="hidden">
+  {published} objavljenih <span class="text-cream/30">/</span> {photos.length} gesamt
+</p>

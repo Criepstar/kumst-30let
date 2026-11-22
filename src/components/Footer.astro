@@ -1,0 +1,88 @@
+---
+import { KOLOFON, FOOTER, NAV } from '../lib/content';
+import { SITE, u } from '../lib/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-wine/20 bg-cream-deep/50">
+  <div class="shell py-14 sm:py-20">
+    <div class="grid gap-12 lg:grid-cols-[1.1fr_1fr_1fr]">
+      <div>
+        <p class="font-display text-3xl leading-none font-black tracking-[-0.02em] text-wine uppercase sm:text-4xl">
+          KUMST
+        </p>
+        <p class="label mt-3 text-ink/70">{SITE.claimSl} / {SITE.claimDe}</p>
+        <p class="mt-6 max-w-xs text-sm leading-relaxed text-ink/80" lang="sl">{FOOTER.taglineSl}</p>
+        <p class="mt-1 max-w-xs text-sm leading-relaxed text-wine/85" lang="de">{FOOTER.taglineDe}</p>
+      </div>
+
+      <div>
+        <p class="label text-wine/60">Kolofon / Impressum</p>
+        <address class="mt-4 space-y-1 text-sm leading-relaxed not-italic text-ink/85">
+          <p>{SITE.org.nameSl}</p>
+          <p lang="de" class="text-wine/80">{SITE.org.nameDe}</p>
+          <p class="pt-2">{SITE.org.street}</p>
+          <p>{SITE.org.city}</p>
+          <p>{SITE.org.country}</p>
+          <p class="pt-2">
+            <a class="link-magenta" href={`mailto:${SITE.org.mail}`}>{SITE.org.mail}</a>
+          </p>
+        </address>
+      </div>
+
+      <div>
+        <p class="label text-wine/60">Navigacija / Navigation</p>
+        <ul class="mt-4 space-y-2">
+          {
+            NAV.concat([{ label: { sl: 'Kolofon', de: 'Impressum' }, href: '/kolofon' }])
+              .filter((item, i, arr) => arr.findIndex((x) => x.href === item.href) === i)
+              .map((item) => (
+                <li>
+                  <a class="label text-ink/75 transition-colors hover:text-magenta" href={u(item.href)}>
+                    {item.label.sl} / {item.label.de}
+                  </a>
+                </li>
+              ))
+          }
+          <li>
+            <a class="label text-ink/40 transition-colors hover:text-magenta" href={u('/admin')}>
+              {FOOTER.edit.sl} / {FOOTER.edit.de}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-14 flex flex-col gap-3 border-t border-wine/15 pt-6 sm:flex-row sm:items-end sm:justify-between">
+      <p class="max-w-md text-[0.8125rem] leading-relaxed text-ink/70" lang="sl">
+        {KOLOFON.siteNoteSl}
+      </p>
+      <p class="max-w-md text-[0.8125rem] leading-relaxed text-wine/80" lang="de">
+        {KOLOFON.siteNoteDe}
+      </p>
+    </div>
+  </div>
+
+  <!-- Fördergeber – wie die Seitenleiste der Broschüre -->
+  <div class="bg-wine text-cream">
+    <div class="shell flex flex-col gap-7 py-8 sm:flex-row sm:items-center sm:justify-between">
+      <div class="max-w-sm">
+        <p class="text-[0.8125rem] leading-relaxed text-cream/90" lang="sl">{KOLOFON.fundingSl}</p>
+        <p class="mt-1 text-[0.8125rem] leading-relaxed text-cream/60" lang="de">
+          {KOLOFON.funding}
+        </p>
+        <p class="label mt-4 text-cream/45">© {year} SPD Trta</p>
+      </div>
+      <img
+        src={u('/brand/foerdergeber.png')}
+        alt="Logos der Fördergeber: Bundeskanzleramt, Druckerei Mohorjeva Hermagoras, Grafik Mario Franc Korpitsch"
+        width="1575"
+        height="832"
+        loading="lazy"
+        decoding="async"
+        class="mx-auto h-auto w-56 shrink-0 sm:mx-0 sm:w-80"
+      />
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import BiText from '../../components/BiText.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import PhotoGrid from '../../components/PhotoGrid.astro';
+import { GALLERY } from '../../lib/content';
+import { u } from '../../lib/site';
+import { listPhotos } from '../../lib/gallery';
+
+const photos = await listPhotos(true);
+---
+
+<Base
+  title="Galerija / Bildergalerie"
+  description={GALLERY.introDe}
+>
+  <section class="border-b border-wine/15 bg-cream-deep/40">
+    <div class="shell py-12 sm:py-16">
+      <SectionHeading label={GALLERY.label} sl={GALLERY.heading.sl} de={GALLERY.heading.de} size="lg" />
+      <BiText sl={GALLERY.introSl} de={GALLERY.introDe} class="mt-8 max-w-2xl" />
+      <p class="label mt-6 text-ink/60">
+        {GALLERY.countSl(photos.length)} <span class="text-wine/35">/</span>
+        {GALLERY.countDe(photos.length)}
+      </p>
+    </div>
+  </section>
+
+  <section class="pt-12 pb-24 sm:pt-16 sm:pb-28">
+    <div class="shell">
+      {
+        photos.length > 0 ? (
+          <PhotoGrid photos={photos} />
+        ) : (
+          <div class="border border-dashed border-wine/30 px-6 py-20 text-center">
+            <p class="text-ink/80" lang="sl">
+              {GALLERY.emptySl}
+            </p>
+            <p class="mt-2 text-wine/80" lang="de">
+              {GALLERY.emptyDe}
+            </p>
+          </div>
+        )
+      }
+
+      <div class="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-wine/15 pt-6">
+        <a class="btn btn-ghost" href={u('/')}>← Domov / Startseite</a>
+        <a class="btn btn-wine" href={u('/#brosura')}>Brošura / Broschüre</a>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,49 @@
+---
+import type { Bi } from '../lib/content';
+
+interface Props {
+  label: Bi;
+  sl: string;
+  de: string;
+  tone?: 'light' | 'dark';
+  size?: 'md' | 'lg';
+}
+
+const { label, sl, de, tone = 'light', size = 'md' } = Astro.props;
+const isDark = tone === 'dark';
+---
+
+<div>
+  <p
+    class:list={[
+      'label flex items-center gap-3',
+      isDark ? 'text-sage' : 'text-sage-deep',
+    ]}
+  >
+    <span class:list={['block h-px w-8', isDark ? 'bg-sage' : 'bg-sage']} aria-hidden="true"></span>
+    <span>{label.sl} <span class={isDark ? 'text-cream/40' : 'text-wine/35'}>/</span> {label.de}</span>
+  </p>
+  <h2
+    class:list={[
+      'mt-5 text-balance',
+      isDark ? 'text-cream' : 'text-ink',
+      size === 'lg'
+        ? 'text-[clamp(2.5rem,6vw,4.75rem)]'
+        : 'text-[clamp(2rem,4.4vw,3.25rem)]',
+    ]}
+  >
+    {sl}
+  </h2>
+  <p
+    lang="de"
+    class:list={[
+      'mt-2.5 font-display font-black uppercase tracking-[-0.01em] text-balance',
+      isDark ? 'text-rose' : 'text-wine',
+      size === 'lg'
+        ? 'text-[clamp(1.375rem,2.6vw,2rem)]'
+        : 'text-[clamp(1.125rem,2.1vw,1.5rem)]',
+    ]}
+  >
+    {de}
+  </p>
+</div>

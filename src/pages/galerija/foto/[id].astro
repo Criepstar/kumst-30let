@@ -1,0 +1,46 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Lightbox from '../../../components/Lightbox.astro';
+import { getPhoto, getNeighbours } from '../../../lib/gallery';
+import { isLoggedIn } from '../../../lib/auth';
+import { u } from '../../../lib/site';
+
+const galleryUrl = u('/galerija');
+const id = Astro.params.id ?? '';
+const photo = await getPhoto(id);
+
+if (!photo) {
+  return Astro.redirect(galleryUrl, 302);
+}
+
+const loggedIn = await isLoggedIn(Astro.cookies);
+if (!photo.published && !loggedIn) {
+  return Astro.redirect(galleryUrl, 302);
+}
+
+const { prev, next, index, total } = await getNeighbours(photo.id);
+const isHtmx = Astro.request.headers.get('hx-request') === 'true';
+const title = photo.captionSl || photo.captionDe || 'Arhivska fotografija / Archivfoto';
+
+const props = {
+  photo,
+  prev,
+  next,
+  index: index >= 0 ? index : 0,
+  total: total || 1,
+  galleryUrl,
+};
+---
+
+{isHtmx ? <Lightbox {...props} /> : (
+  <Base title={title} description={photo.captionDe || 'Arhivska fotografija / Archivfoto des Vereins Trta'}>
+    {!photo.published && (
+      <div class="bg-magenta px-4 py-2 text-center">
+        <p class="label text-cream">Nicht veröffentlicht – Vorschau / Ni objavljeno</p>
+      </div>
+    )}
+    <div id="lightbox-slot">
+      <Lightbox {...props} />
+    </div>
+  </Base>
+)}
