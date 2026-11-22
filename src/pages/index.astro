@@ -14,16 +14,19 @@ const photos = await listPhotos(true);
   <!-- ------------------------------------------------------------ Hero -->
   <!-- Die Grafik ist die Cover-Illustration der Broschüre: Sie enthält den
        Ziegeltitel «30 let – 30 Jahre» und den Claim «Kulturni most /
-       Kulturbrücke». Deshalb trägt sie den Hero allein; der Titel steht für
-       Suchmaschinen und Screenreader zusätzlich als `sr-only`-H1 im Markup. -->
+       Kulturbrücke». Mobil steht sie als Poster unter der Jahreszeile, ab lg
+       links neben Text und Buttons; der Titel steht für Suchmaschinen und
+       Screenreader zusätzlich als `sr-only`-H1 im Markup. -->
   <section class="relative overflow-hidden bg-wine text-cream">
     <div class="pointer-events-none absolute inset-0 opacity-[0.06] bricks-cream" aria-hidden="true">
     </div>
 
-    <div class="shell relative flex flex-col items-center pt-8 pb-9 text-center lg:pt-10 lg:pb-11">
+    <div
+      class="shell relative flex flex-col items-center pt-8 pb-9 text-center lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:grid-rows-[auto_auto] lg:items-center lg:gap-x-14 lg:pt-12 lg:pb-14 lg:text-left xl:gap-x-20"
+    >
       <h1 class="sr-only">{HERO.titleTop} / {HERO.titleBottom} KUMST – Žitara vas / Sittersdorf</h1>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 lg:col-start-1 lg:row-start-1 lg:justify-self-start">
         <span class="block h-px w-8 bg-rose/50" aria-hidden="true"></span>
         <p class="label text-rose">{HERO.years}</p>
         <span class="block h-px w-8 bg-rose/50" aria-hidden="true"></span>
@@ -34,25 +37,28 @@ const photos = await listPhotos(true);
         alt="Naslovnica brošure: hiša KUMST iz zidakov in most / Broschüren-Cover: Kulturhaus KUMST aus Ziegeln und eine Brücke"
         width="967"
         height="1064"
-        class="mt-4 h-auto w-auto max-h-[32vh] object-contain sm:mt-5 sm:max-h-[46vh] lg:max-h-[50vh]"
+        class="mt-4 h-auto w-auto max-h-[32vh] object-contain sm:mt-5 sm:max-h-[46vh] lg:col-start-1 lg:row-start-2 lg:mt-5 lg:max-h-[48vh] lg:justify-self-center"
         fetchpriority="high"
       />
 
-      <BiText sl={HERO.leadSl} de={HERO.leadDe} tone="dark" size="lead" class="mt-6 max-w-2xl sm:mt-7" />
+      <!-- Text und Buttons: mobil unter der Grafik, ab lg rechts daneben -->
+      <div class="mt-6 max-w-2xl sm:mt-7 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:max-w-xl lg:self-center">
+        <BiText sl={HERO.leadSl} de={HERO.leadDe} tone="dark" size="lead" />
 
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-7">
-        <a class="btn btn-cream on-dark" href="#galerija">
-          {HERO.ctaGallery.sl} / {HERO.ctaGallery.de}
-          <span aria-hidden="true">↓</span>
-        </a>
-        <a
-          class="btn on-dark hidden border-cream/60 text-cream hover:bg-cream hover:text-wine sm:inline-flex"
-          href={u(SITE.brochure.file)}
-          target="_blank"
-          rel="noopener"
-        >
-          {HERO.ctaBrochure.sl} / {HERO.ctaBrochure.de}
-        </a>
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-7 lg:mt-8 lg:justify-start">
+          <a class="btn btn-cream on-dark" href="#galerija">
+            {HERO.ctaGallery.sl} / {HERO.ctaGallery.de}
+            <span aria-hidden="true">↓</span>
+          </a>
+          <a
+            class="btn on-dark hidden border-cream/60 text-cream hover:bg-cream hover:text-wine sm:inline-flex"
+            href={u(SITE.brochure.file)}
+            target="_blank"
+            rel="noopener"
+          >
+            {HERO.ctaBrochure.sl} / {HERO.ctaBrochure.de}
+          </a>
+        </div>
       </div>
     </div>
 
