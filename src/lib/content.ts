@@ -30,7 +30,6 @@ export const GALLERY = {
     `${n} ${n === 1 ? 'fotografija' : n === 2 ? 'fotografiji' : n < 5 ? 'fotografije' : 'fotografij'}`,
   countDe: (n: number) => `${n} ${n === 1 ? 'Foto' : 'Fotos'}`,
   archive: 'Arhiv SPD Trta',
-  openTab: { sl: 'Odpri v novem zavihku', de: 'In neuem Tab öffnen' },
   zoomHint: { sl: 'Klikni za povečavo', de: 'Klicken zum Vergrößern' },
 };
 

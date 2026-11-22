@@ -1,7 +1,6 @@
 ---
 import type { Photo } from '../lib/gallery';
-import { GALLERY } from '../lib/content';
-import { mediaUrl, photoFileUrl, u } from '../lib/site';
+import { mediaUrl, u } from '../lib/site';
 
 interface Props {
   photo: Photo;
@@ -17,7 +16,7 @@ const caption = photo.captionSl || photo.captionDe;
 const photoHref = (id: string) => u(`/galerija/foto/${id}`);
 
 const arrowClass =
-  'pointer-events-auto inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-cream/30 text-cream/85 transition-colors hover:border-cream hover:bg-cream hover:text-wine sm:h-12 sm:w-12';
+  'pointer-events-auto inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-cream/30 text-cream/85 transition-colors hover:border-cream hover:bg-cream hover:text-wine sm:absolute sm:top-1/2 sm:h-12 sm:w-12 sm:-translate-y-1/2';
 const iconClass = 'h-5 w-5';
 ---
 
@@ -29,8 +28,6 @@ const iconClass = 'h-5 w-5';
   aria-modal="true"
   aria-label={`Fotografija ${index + 1} od ${total} / Foto ${index + 1} von ${total}`}
 >
-  <div class="absolute inset-0" data-lb-close aria-hidden="true"></div>
-
   <div class="pointer-events-none relative flex h-full flex-col">
     <!-- Kopfzeile: Zähler und schließen -->
     <div
@@ -59,18 +56,18 @@ const iconClass = 'h-5 w-5';
     </div>
 
     <!--
-      Bühne: ab sm stehen die Pfeile links und rechts vom Bild. Mobil rutschen
-      sie unter das Foto – dort wäre über dem Bild kein Platz, ohne es zu
-      verdecken. Wischen über das Bild blättert ebenfalls weiter.
+      Bühne: ab sm stehen die Pfeile fest am linken und rechten Rand, damit sie
+      beim Blättern nicht wandern. Mobil rutschen sie unter das Foto. Wischen
+      über das Bild blättert ebenfalls weiter.
     -->
     <div
-      class="pointer-events-none relative flex min-h-0 flex-1 flex-wrap touch-none select-none content-center items-center justify-center gap-x-6 gap-y-4 px-3 pb-5 sm:flex-nowrap sm:gap-x-5 sm:px-6 sm:pb-5"
+      class="pointer-events-none relative flex min-h-0 flex-1 flex-wrap touch-none select-none content-center items-center justify-center gap-x-6 gap-y-4 px-3 pb-5 sm:flex-nowrap sm:px-6 sm:pb-5"
       data-lb-stage
     >
       {
         prev && (
           <a
-            class={`${arrowClass} order-2 sm:order-none`}
+            class={`${arrowClass} order-2 sm:left-4 lg:left-8`}
             href={photoHref(prev.id)}
             hx-get={photoHref(prev.id)}
             hx-target="#lightbox-slot"
@@ -96,27 +93,16 @@ const iconClass = 'h-5 w-5';
       }
 
       <div
-        class="pointer-events-auto order-1 flex w-full min-w-0 basis-full flex-col items-center justify-center sm:order-none sm:w-auto sm:basis-auto"
+        class="pointer-events-auto order-1 flex w-full min-w-0 basis-full flex-col items-center justify-center sm:order-none sm:w-auto sm:basis-auto sm:px-20 lg:px-24"
       >
-        <!-- Verlinkt auf die JPEG-Fassung: Linksklick und „Link in neuem Tab öffnen“ liefern ein .jpg -->
-        <a
-          class="block max-w-full cursor-zoom-in"
-          href={photoFileUrl(photo.id)}
-          data-lb-photo
+        <img
+          src={mediaUrl(photo.id, 'full')}
+          alt={caption || 'Arhivska fotografija / Archivfoto des Vereins Trta'}
+          width={photo.width}
+          height={photo.height}
           draggable="false"
-          target="_blank"
-          rel="noopener"
-          title={`${GALLERY.openTab.sl} / ${GALLERY.openTab.de} (.jpg)`}
-        >
-          <img
-            src={mediaUrl(photo.id, 'full')}
-            alt={caption || 'Arhivska fotografija / Archivfoto des Vereins Trta'}
-            width={photo.width}
-            height={photo.height}
-            draggable="false"
-            class="max-h-[calc(100svh-12rem)] w-auto max-w-full object-contain shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] sm:max-h-[calc(100svh-9.5rem)]"
-          />
-        </a>
+          class="max-h-[calc(100svh-12rem)] w-auto max-w-full object-contain shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] sm:max-h-[calc(100svh-9.5rem)]"
+        />
 
         <div class="mt-4 max-w-2xl text-center sm:mt-5">
           {
@@ -146,7 +132,7 @@ const iconClass = 'h-5 w-5';
       {
         next && (
           <a
-            class={`${arrowClass} order-3 sm:order-none`}
+            class={`${arrowClass} order-3 sm:right-4 lg:right-8`}
             href={photoHref(next.id)}
             hx-get={photoHref(next.id)}
             hx-target="#lightbox-slot"
