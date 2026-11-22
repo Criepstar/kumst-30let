@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, unlink, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, stat, unlink, writeFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import sharp from 'sharp';
@@ -23,14 +23,31 @@ export type Photo = {
 type GalleryFile = { version: 1; photos: Photo[] };
 
 let cache: GalleryFile | null = null;
+let cacheStamp = '';
 
 async function ensureDirs() {
   await mkdir(UPLOAD_DIR, { recursive: true });
 }
 
+/**
+ * Stempel der Indexdatei (Änderungszeit + Grösse). Damit merkt der laufende
+ * Server, wenn gallery.json von aussen geändert wurde – etwa durch
+ * `node scripts/seed.mjs` im Container, durch eine Sicherung oder von Hand.
+ */
+async function indexStamp(): Promise<string> {
+  try {
+    const info = await stat(INDEX_FILE);
+    return `${info.mtimeMs}:${info.size}`;
+  } catch {
+    return '';
+  }
+}
+
 export async function readGallery(): Promise<GalleryFile> {
-  if (cache) return cache;
   await ensureDirs();
+  const stamp = await indexStamp();
+  if (cache && stamp === cacheStamp) return cache;
+
   try {
     const raw = await readFile(INDEX_FILE, 'utf8');
     const parsed = JSON.parse(raw) as GalleryFile;
@@ -39,6 +56,7 @@ export async function readGallery(): Promise<GalleryFile> {
   } catch {
     cache = { version: 1, photos: [] };
   }
+  cacheStamp = stamp;
   return cache;
 }
 
@@ -48,6 +66,7 @@ async function writeGallery(g: GalleryFile) {
   await writeFile(tmp, JSON.stringify(g, null, 2), 'utf8');
   await rename(tmp, INDEX_FILE);
   cache = g;
+  cacheStamp = await indexStamp();
 }
 
 export async function listPhotos(onlyPublished = true): Promise<Photo[]> {
