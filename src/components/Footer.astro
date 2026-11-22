@@ -12,31 +12,6 @@ const year = new Date().getFullYear();
 <footer id="kolofon" class="border-t border-wine/20 bg-cream-deep/45">
   <div class="shell py-14 sm:py-16">
     <div class="grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:gap-20">
-      <div>
-        <p class="label flex items-center gap-3 text-sage-deep">
-          <span class="block h-px w-8 bg-sage" aria-hidden="true"></span>
-          <span>{KOLOFON.label.sl} <span class="text-wine/35">/</span> {KOLOFON.label.de}</span>
-        </p>
-
-        <h2 class="mt-5 text-[clamp(1.75rem,3.6vw,2.75rem)] text-ink">
-          {KOLOFON.heading.sl}
-          <span lang="de" class="mt-1 block text-wine">{KOLOFON.heading.de}</span>
-        </h2>
-
-        <dl class="mt-9 divide-y divide-wine/15 border-t border-wine/15">
-          {
-            KOLOFON.rows.map((row) => (
-              <div class="grid gap-1.5 py-4 sm:grid-cols-[minmax(0,0.36fr)_minmax(0,0.64fr)] sm:gap-6">
-                <dt class="label pt-1 text-sage-deep">
-                  {row.k.sl} <span class="text-wine/35">/</span> {row.k.de}
-                </dt>
-                <dd class="text-[0.9375rem] leading-relaxed text-ink">{row.v}</dd>
-              </div>
-            ))
-          }
-        </dl>
-      </div>
-
       <aside class="self-start space-y-8">
         <div class="border border-wine/25 px-7 py-8">
           <p class="label text-sage-deep">
@@ -56,39 +31,9 @@ const year = new Date().getFullYear();
             </p>
           </address>
         </div>
-
-        <div class="px-1">
-          <p class="label text-sage-deep">{DOWNLOAD.label.sl} / {DOWNLOAD.label.de}</p>
-          <p class="mt-3 text-[0.875rem] leading-relaxed text-ink/80">{SITE.brochure.sizeLabel}</p>
-          <a class="btn btn-wine mt-4 w-full justify-between sm:w-auto" href={u(SITE.brochure.file)} download type="application/pdf">
-            {DOWNLOAD.cta.sl} / {DOWNLOAD.cta.de}
-            <span aria-hidden="true">↓</span>
-          </a>
-        </div>
       </aside>
     </div>
-
-    <div class="mt-12 border-t border-wine/15 pt-6">
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p class="font-display text-xl leading-none font-black tracking-[-0.02em] text-wine uppercase">
-            KUMST
-          </p>
-          <p class="label mt-2 text-ink/70">{FOOTER.taglineSl}</p>
-          <p class="label text-ink/50" lang="de">{FOOTER.taglineDe}</p>
-        </div>
-
-        <div class="max-w-md sm:text-right">
-          <p class="text-[0.8125rem] leading-relaxed text-ink/70" lang="sl">{KOLOFON.siteNoteSl}</p>
-          <p class="text-[0.8125rem] leading-relaxed text-wine/80" lang="de">{KOLOFON.siteNoteDe}</p>
-          <a class="label mt-3 inline-block text-ink/40 transition-colors hover:text-magenta" href={u('/admin')}>
-            {FOOTER.edit.sl} / {FOOTER.edit.de}
-          </a>
-        </div>
-      </div>
-    </div>
   </div>
-
   <!-- Fördergeber – wie die Seitenleiste der Broschüre -->
   <div class="bg-wine text-cream">
     <div class="shell flex flex-col gap-7 py-8 sm:flex-row sm:items-center sm:justify-between">

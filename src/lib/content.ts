@@ -9,7 +9,7 @@
 export type Bi = { sl: string; de: string };
 
 export const HERO = {
-  years: '1996 — 2026',
+  years: '1996 - 2026',
   titleTop: '30 let',
   titleBottom: '30 Jahre',
   bigSl: 'KULTURNI MOST',

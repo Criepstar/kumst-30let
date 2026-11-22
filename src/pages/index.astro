@@ -34,11 +34,7 @@ const photos = await listPhotos(true);
           >
         </h1>
 
-        <p class="mt-5 inline-flex items-center gap-2 border border-cream/40 px-3 py-1.5 lg:mt-6">
-          <span class="label text-cream">{HERO.bigSl}</span>
-          <span class="label text-cream/35">/</span>
-          <span class="label text-rose" lang="de">{HERO.bigDe}</span>
-        </p>
+
 
         <BiText sl={HERO.leadSl} de={HERO.leadDe} tone="dark" size="lead" class="mt-5 max-w-xl lg:mt-6" />
 
@@ -50,11 +46,10 @@ const photos = await listPhotos(true);
           <a
             class="btn hidden border-cream/60 text-cream hover:bg-cream hover:text-wine sm:inline-flex"
             href={u(SITE.brochure.file)}
-            download
-            type="application/pdf"
+            target="_blank"
+            rel="noopener"
           >
             {HERO.ctaBrochure.sl} / {HERO.ctaBrochure.de}
-            <span aria-hidden="true">↓</span>
           </a>
         </div>
       </div>
@@ -87,6 +82,7 @@ const photos = await listPhotos(true);
 
       <BiText sl={GALLERY.introSl} de={GALLERY.introDe} class="mt-6 max-w-2xl" />
 
+
       <div class="mt-10 sm:mt-12">
         {
           photos.length > 0 ? (
@@ -106,7 +102,7 @@ const photos = await listPhotos(true);
 
       <div class="mt-2 flex items-center justify-between gap-4 border-t border-wine/15 pt-4">
         <p class="label text-ink/45">{GALLERY.archive}</p>
-        <p class="label text-ink/40">{HERO.years}</p>
+        <p class="label text-ink/40">1907 - 2026</p>
       </div>
     </div>
   </section>
@@ -115,8 +111,7 @@ const photos = await listPhotos(true);
   <section id="brosura" class="scroll-mt-2 border-t border-wine/15 bg-cream-deep/50">
     <div class="shell flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:gap-10 sm:py-12">
       <div>
-        <p class="label text-sage-deep">{DOWNLOAD.label.sl} / {DOWNLOAD.label.de}</p>
-        <h2 class="mt-3 text-[clamp(1.5rem,2.8vw,2.125rem)] text-ink">
+        <h2 class="text-[clamp(1.5rem,2.8vw,2.125rem)] text-ink">
           {DOWNLOAD.heading.sl}
           <span lang="de" class="mt-0.5 block text-wine">{DOWNLOAD.heading.de}</span>
         </h2>
@@ -126,30 +121,12 @@ const photos = await listPhotos(true);
         <p class="max-w-xl text-[0.9375rem] leading-relaxed text-wine/85" lang="de">
           {DOWNLOAD.lineDe}
         </p>
-      </div>
-
-      <div class="shrink-0">
-        <div class="flex flex-wrap items-center gap-3">
-          <a class="btn btn-wine" href={u(SITE.brochure.file)} download type="application/pdf">
+        <div class="mt-5 flex flex-wrap items-center gap-3">
+            <a class="btn btn-wine" href={u(SITE.brochure.file)} target="_blank" rel="noopener">
             {DOWNLOAD.cta.sl} / {DOWNLOAD.cta.de}
             <span aria-hidden="true">↓</span>
           </a>
-          <a
-            class="btn btn-ghost"
-            href={u(SITE.brochure.file)}
-            target="_blank"
-            rel="noopener"
-          >
-            {DOWNLOAD.ctaOpen.sl} / {DOWNLOAD.ctaOpen.de}
-          </a>
         </div>
-        <p class="mt-3 flex flex-wrap items-center gap-x-2 text-[0.8125rem] leading-relaxed text-ink/60">
-          <span>{SITE.brochure.sizeLabel}</span>
-          <span class="text-wine/30" aria-hidden="true">·</span>
-          <span>{DOWNLOAD.hintSl}</span>
-          <span class="text-wine/30" aria-hidden="true">/</span>
-          <span lang="de">{DOWNLOAD.hintDe}</span>
-        </p>
       </div>
     </div>
   </section>
