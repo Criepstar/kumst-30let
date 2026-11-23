@@ -11,6 +11,7 @@ export type Bi = { sl: string; de: string };
 export const HERO = {
   titleTop: '30 let',
   titleBottom: '30 Jahre',
+  heading: { sl: '30 let Kumst', de: '30 Jahre Kumst' },
   leadSl: 'Trideset let kulturnega doma KUMST v Žitari vasi – v fotografijah iz arhiva društva Trta.',
   leadDe: 'Dreißig Jahre Kulturhaus KUMST in Sittersdorf – in Fotografien aus dem Archiv des Vereins Trta.',
   ctaGallery: { sl: 'Galerija', de: 'Galerie' },
@@ -29,7 +30,7 @@ export const GALLERY = {
   countSl: (n: number) =>
     `${n} ${n === 1 ? 'fotografija' : n === 2 ? 'fotografiji' : n < 5 ? 'fotografije' : 'fotografij'}`,
   countDe: (n: number) => `${n} ${n === 1 ? 'Foto' : 'Fotos'}`,
-  archive: 'Arhiv SPD Trta',
+  archive: 'KUMST - 30 let / Jahre',
   zoomHint: { sl: 'Klikni za povečavo', de: 'Klicken zum Vergrößern' },
 };
 

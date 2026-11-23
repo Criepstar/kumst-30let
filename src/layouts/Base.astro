@@ -46,6 +46,21 @@ const ogImage = new URL(u('/brand/og.jpg'), siteOrigin).toString();
     <meta property="og:locale:alternate" content="de_AT" />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <!--
+      Statistik (Umami, selbst gehostet). In der Redaktion nicht mitzählen,
+      damit die Zahlen nur den öffentlichen Teil abbilden.
+    -->
+    {
+      !bare && !noindex && (
+        <script
+          is:inline
+          defer
+          src="https://stat.trta.at/script.js"
+          data-website-id="08cd0563-d8bf-4a72-9660-39a352504eaa"
+        />
+      )
+    }
+
     <slot name="head" />
   </head>
   <body class:list={['min-h-screen antialiased', bare && 'bg-cream']}>
@@ -69,6 +84,16 @@ const ogImage = new URL(u('/brand/og.jpg'), siteOrigin).toString();
       htmx.config.historyCacheSize = 0;
       htmx.config.refreshOnHistoryMiss = true;
       htmx.config.includeIndicatorStyles = false;
+
+      // Direkt verlinktes Foto: die Lightbox steht im <main>, htmx tauscht aber
+      // in #lightbox-slot. Einmal umhängen – sonst gäbe es nach dem ersten
+      // Weiterblättern zwei Betrachter, und Tastatur wie Wischen würden den
+      // alten, verdeckten treffen.
+      {
+        const slot = document.getElementById('lightbox-slot');
+        const direct = document.getElementById('lightbox');
+        if (slot && direct && !slot.contains(direct)) slot.appendChild(direct);
+      }
 
       function closeLightbox() {
         const lb = document.getElementById('lightbox');
@@ -110,11 +135,15 @@ const ogImage = new URL(u('/brand/og.jpg'), siteOrigin).toString();
 
       // Wischen über das Foto blättert weiter. Ein Wisch zählt nicht als Klick –
       // so öffnet sich dabei nicht versehentlich die .jpg-Fassung in einem Tab.
+      // Gezoomt wird die Seite selbst (Pinch, siehe `.lb-stage`); dann gehören
+      // die Gesten dem Browser, und hier wird nicht geblättert.
       let swipeStartX = 0;
       let swipeStartY = 0;
       let swipeTracking = false;
       let swipeActive = false;
       let suppressClickUntil = 0;
+
+      const pageZoomed = () => (window.visualViewport?.scale ?? 1) > 1.01;
 
       const resetSwipe = () => {
         swipeTracking = false;
@@ -127,6 +156,7 @@ const ogImage = new URL(u('/brand/og.jpg'), siteOrigin).toString();
           const target = event.target as HTMLElement | null;
           if (!target?.closest('[data-lb-stage]')) return;
           if (event.pointerType === 'mouse' && event.button !== 0) return;
+          if (pageZoomed()) return;
           swipeStartX = event.clientX;
           swipeStartY = event.clientY;
           swipeTracking = true;

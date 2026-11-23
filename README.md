@@ -73,7 +73,7 @@ src/
     media/[file].ts            liefert WebP (Seite) und JPEG (neuer Tab) aus data/uploads
     api/admin/…                Login/Logout, Upload, Aktionen pro Foto
   components/                  Footer (= Kolofon + Fußzeile), PhotoGrid, Lightbox, Admin-Karten
-  layouts/Base.astro           Head/OG, HTMX-Init, Lightbox-Tastatursteuerung
+  layouts/Base.astro           Head/OG, HTMX-Init, Betrachter: Tastatur und Wischen
   lib/
     site.ts                    Adressen, BASE_PATH-Helfer u(), mediaUrl(), photoFileUrl()
     content.ts                 alle zweisprachigen Texte (SL zuerst, dann DE)
@@ -83,7 +83,9 @@ src/
 public/
   brand/                       Titelbild (kumst-hero.svg = Cover-Illustration der
                                Broschüre: Ziegeltitel, Haus, KUMST, Claim – beige auf
-                               transparent), OG-Bild, Fördergeber-Logos
+                               transparent), OG-Bild, Logo Bundeskanzleramt
+                               (bundeskanzleramt.png) und Zeichen des Grafikers
+                               (mario-franc.svg, verlinkt auf mariofranc.at)
   download/                    die Broschüre als PDF
   favicon.svg                  Ziegel-Kürzel K in Rot/Beige
 design/                        Originalgrafiken, die nicht ausgeliefert werden
@@ -227,15 +229,26 @@ docker exec -it kumst-30 node scripts/seed.mjs
   (CSS-Spalten, damit die Archivformate erhalten bleiben).
 - Ein Klick öffnet die Lightbox (HTMX-Fragment, mit `←`/`→`/Esc und Deep-Link auf
   `/galerija/foto/<id>`); ohne JavaScript führt derselbe Link auf eine eigene Seite.
+- Im Betrachter blättert **ein Wisch** über das Bild. Gezoomt wird die **ganze
+  Seite** mit dem normalen Browser-Zoom (zwei Finger, wie auf jeder anderen
+  Seite; das `viewport`-Meta schränkt ihn nicht ein). Die Bühne setzt dafür
+  `touch-action: pinch-zoom` (`.lb-stage` in `global.css`) – bewusst nicht
+  `auto`: damit zieht der Browser das Ein-Finger-Wischen als Scrollgeste an sich
+  und das Blättern funktioniert nicht mehr. Solange die Seite vergrößert ist,
+  verschiebt ein Finger die Ansicht statt zu blättern; das prüft
+  `layouts/Base.astro` über `visualViewport.scale`.
 - Ein Foto ist intern als **WebP** gespeichert (1800 px, Thumbnail 700 px). Im
   Markup steht nur ein `<img src="/media/<id>.webp">` – kein Link, kein JS.
   Wer das Bild per Rechtsklick in einem neuen Tab öffnet, bekommt trotzdem ein
   gewohntes JPEG: „Bild in neuem Tab öffnen“ ist eine Top-Level-Navigation und
-  schickt `Sec-Fetch-Dest: document`, worauf `/media/[file].ts` mit `302` auf
-  `/media/<id>.jpg` antwortet (`Vary: Sec-Fetch-Dest`, `Cache-Control: no-store`).
-  Normale Bild-Requests (`Sec-Fetch-Dest: image`) bekommen weiterhin WebP. Die
-  JPEG-Fassung wird beim ersten Aufruf serverseitig mit `sharp` erzeugt und in
-  `data/uploads` zwischengespeichert.
+  schickt `Sec-Fetch-Dest: document`, worauf `/media/[file].ts` mit `302` auf die
+  JPEG-Fassung antwortet – auch beim Thumbnail, dann auf `/media/<id>.jpg`
+  (`Vary: Sec-Fetch-Dest, Accept`, `Cache-Control: no-store`). Normale
+  Bild-Requests (`Sec-Fetch-Dest: image`) bekommen weiterhin WebP. Browser ohne
+  Fetch Metadata (Safari < 16.4) und der Aufruf aus der Adresszeile werden über
+  die `Accept`-Liste erkannt (`text/html` = Dokument). Die JPEG-Fassung wird beim
+  ersten Aufruf serverseitig mit `sharp` erzeugt und in `data/uploads`
+  zwischengespeichert.
 
 ## Design
 

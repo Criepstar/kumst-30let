@@ -14,16 +14,19 @@ import { jpegFilePath, mediaFilePath } from '../../lib/gallery';
  *
  * Inhaltliche Aushandlung pro Request (kein Markup-Trick):
  * „Bild in neuem Tab öffnen“ ist eine Top-Level-Navigation und schickt deshalb
- * `Sec-Fetch-Dest: document`. Darauf antworten wir mit einem 302 auf die
+ * `Sec-Fetch-Dest: document` (bzw., in Browsern ohne Fetch Metadata, eine
+ * `Accept`-Liste mit `text/html`). Darauf antworten wir mit einem 302 auf die
  * JPEG-Fassung. Ein `<img>` schickt `Sec-Fetch-Dest: image` und bekommt
  * weiterhin WebP. So bleibt im Markup ein einziges `<img src="…webp">`, ohne
- * Link-Wrapper, ohne JavaScript, ohne zusätzliche Bild-Ebene.
+ * Link-Wrapper, ohne JavaScript, ohne zusätzliche Bild-Ebene – ein Linksklick
+ * auf das Bild löst nichts aus.
  *
  * Wichtig für Caches: Die WebP-Antworten und der Redirect tragen
- * `Vary: Sec-Fetch-Dest`, der Redirect zusätzlich `Cache-Control: no-store`.
+ * `Vary: Sec-Fetch-Dest, Accept`, der Redirect zusätzlich `Cache-Control: no-store`.
  */
 
 const IMMUTABLE = 'public, max-age=31536000, immutable';
+const VARY = 'Sec-Fetch-Dest, Accept';
 const notFound = () => new Response('Not found', { status: 404 });
 
 async function serveFile(
@@ -62,14 +65,28 @@ async function serveFile(
 /**
  * Wird die WebP-Adresse als Dokument geöffnet (Rechtsklick → „Bild in neuem
  * Tab öffnen“, Adresse kopieren und einfügen), leiten wir auf das JPEG um.
- * Fehlt der Header (ältere Browser, curl), bleibt es beim WebP.
+ *
+ * Erkannt wird das an `Sec-Fetch-Dest: document` (Chrome/Edge ab 76,
+ * Firefox ab 90, Safari ab 16.4). Ältere Browser schicken den Header nicht;
+ * dort entscheidet die Akzeptanzliste: eine Navigation fragt nach HTML, ein
+ * `<img>` nach Bildern. Ohne beides (`*`/`*`, curl) bleibt es beim WebP.
  */
+function wantsDocument(request: Request): boolean {
+  const dest = request.headers.get('sec-fetch-dest');
+  if (dest) return dest === 'document';
+
+  const accept = request.headers.get('accept') ?? '';
+  return /text\/html/i.test(accept);
+}
+
 function jpegRedirectForDocument(request: Request): Response | null {
-  if (request.headers.get('sec-fetch-dest') !== 'document') return null;
+  if (!wantsDocument(request)) return null;
 
   const url = new URL(request.url);
   if (!/(?:-t)?\.webp$/i.test(url.pathname)) return null;
 
+  // Auch das Thumbnail führt auf die volle JPEG-Fassung – im neuen Tab will
+  // man das große Bild, nicht die 700-px-Version.
   url.pathname = url.pathname.replace(/-t\.webp$/i, '.jpg').replace(/\.webp$/i, '.jpg');
 
   return new Response(null, {
@@ -77,7 +94,7 @@ function jpegRedirectForDocument(request: Request): Response | null {
     headers: {
       Location: `${url.pathname}${url.search}`,
       'Cache-Control': 'no-store',
-      Vary: 'Sec-Fetch-Dest',
+      Vary: VARY,
     },
   });
 }
@@ -101,7 +118,7 @@ export const GET: APIRoute = async ({ params, request }) => {
       return redirect;
     }
 
-    return serveFile(original, 'image/webp', request, { Vary: 'Sec-Fetch-Dest' });
+    return serveFile(original, 'image/webp', request, { Vary: VARY });
   }
 
   const jpg = /^([a-z0-9]{6,24})\.jpe?g$/i.exec(file);

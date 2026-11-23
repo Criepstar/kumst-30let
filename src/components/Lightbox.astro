@@ -58,10 +58,11 @@ const iconClass = 'h-5 w-5';
     <!--
       Bühne: ab sm stehen die Pfeile fest am linken und rechten Rand, damit sie
       beim Blättern nicht wandern. Mobil rutschen sie unter das Foto. Wischen
-      über das Bild blättert ebenfalls weiter.
+      über das Bild blättert weiter, zwei Finger zoomen die ganze Seite über
+      den Browser – dafür sorgt `.lb-stage` in global.css.
     -->
     <div
-      class="pointer-events-none relative flex min-h-0 flex-1 flex-wrap touch-none select-none content-center items-center justify-center gap-x-6 gap-y-4 px-3 pb-5 sm:flex-nowrap sm:px-6 sm:pb-5"
+      class="lb-stage pointer-events-none relative flex min-h-0 flex-1 flex-wrap select-none content-center items-center justify-center gap-x-6 gap-y-4 px-3 pb-5 sm:flex-nowrap sm:px-6 sm:pb-5"
       data-lb-stage
     >
       {

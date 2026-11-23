@@ -247,6 +247,15 @@
     border-color: var(--color-accent);
   }
 
+  /* Bühne des Betrachters: der Browser darf die Seite zoomen (Pinch mit zwei
+     Fingern). Beim Zoomen verschiebt ein Finger die vergrößerte Ansicht.
+     Ein-Finger-Wischen bleibt dagegen bei uns und blättert weiter – mit
+     `touch-action: auto` würde der Browser die Geste an sich ziehen und das
+     Wischen abbrechen (geprüft). */
+  .lb-stage {
+    touch-action: pinch-zoom;
+  }
+
   /* Fokusring auf dunklen Flächen (Rot, Dunkelgrün): Beige statt Violett */
   .on-dark:focus-visible {
     outline-color: var(--color-cream);

@@ -15,37 +15,45 @@ const photos = await listPhotos(true);
   <!-- Die Grafik ist die Cover-Illustration der Broschüre: Sie enthält den
        Ziegeltitel «30 let – 30 Jahre» und den Claim «Kulturni most /
        Kulturbrücke». Mobil steht sie als Poster über dem Text, ab lg links
-       daneben; der Titel steht für Suchmaschinen und Screenreader zusätzlich
-       als `sr-only`-H1 im Markup. -->
+       daneben. Die Überschrift über dem Vorwort ist der sichtbare H1
+       (Slowenisch groß, Deutsch darunter). -->
   <section class="relative overflow-hidden bg-wine text-cream">
-    <div class="pointer-events-none absolute inset-0 opacity-[0.06] bricks-cream" aria-hidden="true">
+    <div class="pointer-events-none absolute inset-0 opacity-[0.06] " aria-hidden="true">
     </div>
 
     <div
       class="shell relative flex flex-col items-center pt-8 pb-9 text-center lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:items-center lg:gap-x-14 lg:pt-10 lg:pb-12 lg:text-left xl:gap-x-20"
     >
-      <h1 class="sr-only">{HERO.titleTop} / {HERO.titleBottom} KUMST – Žitara vas / Sittersdorf</h1>
-
       <img
         src={u('/brand/kumst-hero.svg')}
         alt="Naslovnica brošure: hiša KUMST iz zidakov in most / Broschüren-Cover: Kulturhaus KUMST aus Ziegeln und eine Brücke"
         width="967"
         height="1064"
-        class="h-auto w-auto max-h-[45vh] object-contain sm:max-h-[52vh] lg:col-start-1 lg:max-h-[56vh] lg:justify-self-center"
+        class="h-auto w-auto object-contain sm:max-h-[52vh] lg:col-start-1 lg:max-h-[56vh] lg:justify-self-center"
         fetchpriority="high"
       />
 
       <!-- Text und Buttons: mobil unter der Grafik, ab lg rechts daneben -->
       <div class="mt-6 max-w-2xl sm:mt-7 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:max-w-xl lg:self-center">
-        <BiText sl={HERO.leadSl} de={HERO.leadDe} tone="dark" size="lead" />
+        <!-- Sichtbar nur ab lg (Text neben dem Poster); mobil trägt das Poster den Titel, der H1 bleibt für Screenreader im Markup. -->
+        <h1 class="sr-only text-balance lg:not-sr-only">
+          <span lang="sl" class="block text-[clamp(1.625rem,3vw,2.5rem)] text-cream">
+            {HERO.heading.sl}
+          </span>{' '}
+          <span lang="de" class="mt-1.5 block text-[clamp(1.0625rem,1.7vw,1.4375rem)] text-rose">
+            {HERO.heading.de}
+          </span>
+        </h1>
+
+        <BiText sl={HERO.leadSl} de={HERO.leadDe} tone="dark" size="lead" class="lg:mt-5 xl:mt-6" />
 
         <div class="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-7 lg:mt-8 lg:justify-start">
-          <a class="btn btn-cream on-dark" href="#galerija">
+          <a class="btn w-64 text-center btn-cream on-dark" href="#galerija">
             {HERO.ctaGallery.sl} / {HERO.ctaGallery.de}
             <span aria-hidden="true">↓</span>
           </a>
           <a
-            class="btn on-dark hidden border-cream/60 text-cream hover:bg-cream hover:text-wine sm:inline-flex"
+            class="btn on-dark text-center w-64 border-cream/60 text-cream hover:bg-cream hover:text-wine inline-flex"
             href={u(SITE.brochure.file)}
             target="_blank"
             rel="noopener"
@@ -92,7 +100,7 @@ const photos = await listPhotos(true);
 
       <div class="mt-2 flex items-center justify-between gap-4 border-t border-wine/15 pt-4">
         <p class="label text-ink/45">{GALLERY.archive}</p>
-        <p class="label text-ink/40 tabular-nums">1907 – 2026</p>
+        <p class="label text-ink/40 tabular-nums">1996 – 2026</p>
       </div>
     </div>
   </section>
