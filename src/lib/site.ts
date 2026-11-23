@@ -34,7 +34,7 @@ export const SITE = {
     street: 'Žitara vas / Sittersdorf 3',
     city: '9133 Žitara vas / Sittersdorf',
     country: 'Avstrija / Österreich',
-    mail: 'info@trta.at',
+    mail: 'spdtrta@gmail.com',
   },
   gallery: {
     /** maximale Kantenlänge, in der Fotos gespeichert werden */
