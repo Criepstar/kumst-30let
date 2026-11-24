@@ -23,10 +23,10 @@ export const SITE = {
   subtitleDe: 'Kulturhaus KUMST, Sittersdorf',
   url: env('SITE_URL', 'https://www.trta.at/30-let-kumst')!,
   brochure: {
-    file: '/download/KUMST-30-let-30-Jahre.pdf',
+    file: '/download/30-let-KUMST.pdf',
     nameSl: 'Brošura 30 let KUMST',
     nameDe: 'Broschüre 30 Jahre KUMST',
-    sizeLabel: 'PDF · 5,7 MB · 2 strani / 2 Seiten',
+    sizeLabel: 'PDF · 2,6 MB · 8 strani / 8 Seiten',
   },
   org: {
     nameSl: 'Slovensko prosvetno društvo Trta',
@@ -34,7 +34,7 @@ export const SITE = {
     street: 'Žitara vas / Sittersdorf 3',
     city: '9133 Žitara vas / Sittersdorf',
     country: 'Avstrija / Österreich',
-    mail: 'spd.trta@gmail.com',
+    mail: 'trtaspd@gmail.com',
   },
   gallery: {
     /** maximale Kantenlänge, in der Fotos gespeichert werden */
