@@ -47,13 +47,14 @@ const photos = await listPhotos(true);
 
         <BiText sl={HERO.leadSl} de={HERO.leadDe} tone="dark" size="lead" class="lg:mt-5 xl:mt-6" />
 
+        <!-- Beide Angebote gleichwertig nebeneinander: Galerie (v slikah) und
+             Broschüre (v besedah) – der Schluss des Vorworts greift beide auf. -->
         <div class="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-7 lg:mt-8 lg:justify-start">
-          <a class="btn w-64 text-center btn-cream on-dark" href="#galerija">
+          <a class="btn w-64 text-center justify-center inline-flex btn-cream on-dark" href="#galerija">
             {HERO.ctaGallery.sl} / {HERO.ctaGallery.de}
-            <span aria-hidden="true">↓</span>
           </a>
           <a
-            class="btn on-dark text-center w-64 border-cream/60 text-cream hover:bg-cream hover:text-wine inline-flex"
+            class="btn on-dark text-center w-64 justify-center border-cream/60 text-cream hover:bg-cream hover:text-wine inline-flex"
             href={u(SITE.brochure.file)}
             target="_blank"
             rel="noopener"

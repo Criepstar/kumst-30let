@@ -12,8 +12,10 @@ export const HERO = {
   titleTop: '30 let',
   titleBottom: '30 Jahre',
   heading: { sl: '30 let Kumst', de: '30 Jahre Kumst' },
-  leadSl: 'Trideset let kulturnega doma KUMST v Žitari vasi – v fotografijah iz arhiva društva Trta.',
-  leadDe: 'Dreißig Jahre Kulturhaus KUMST in Sittersdorf – in Fotografien aus dem Archiv des Vereins Trta.',
+  leadSl:
+    'Od leta 1996 je kulturni dom KUMST v Žitari vasi most med ljudmi in jeziki – ob jubileju v slikah in besedah.',
+  leadDe:
+    'Seit 1996 ist das Kulturhaus KUMST in Sittersdorf eine Brücke zwischen Menschen und Sprachen – zum Jubiläum in Bildern und Worten.',
   ctaGallery: { sl: 'Galerija', de: 'Galerie' },
   ctaBrochure: { sl: 'Brošura', de: 'Broschüre' },
 };
@@ -22,9 +24,9 @@ export const GALLERY = {
   label: { sl: 'Arhiv', de: 'Archiv' },
   heading: { sl: 'Galerija slik', de: 'Bildergalerie' },
   introSl:
-    'Fotografije iz arhiva Slovenskega prosvetnega društva Trta: delovne akcije, gledališke predstave, koncerti in praznovanja v kulturnem domu.',
+    'Delovne akcije, prireditve in fotografije kulturnega doma iz zadnjih 110 let – iz arhiva Slovenskega prosvetnega društva Trta.',
   introDe:
-    'Fotografien aus dem Archiv des Slovensko prosvetno društvo Trta: Arbeitsaktionen, Theaterabende, Konzerte und Feste im Kulturhaus.',
+    'Arbeitseinsätze, Veranstaltungen und Bilder des Kulturhauses aus den vergangenen 110 Jahren – aus dem Archiv des Slowenischen Kulturvereins Trta.',
   emptySl: 'Galerija je še prazna. Fotografije bomo kmalu dodali.',
   emptyDe: 'Die Galerie ist noch leer. Die Fotos folgen in Kürze.',
   countSl: (n: number) =>
@@ -37,8 +39,10 @@ export const GALLERY = {
 export const DOWNLOAD = {
   label: { sl: 'Tiskana izdaja', de: 'Printausgabe' },
   heading: { sl: 'Brošura', de: 'Die Broschüre' },
-  lineSl: 'Vse fotografije in še veliko več: jubilejna brošura 30 let KUMST kot PDF.',
-  lineDe: 'Alle Fotos und viel mehr: die Jubiläumsbroschüre 30 Jahre KUMST als PDF.',
+  lineSl:
+    'Kaj KUMST pomeni ljudem: spomini in misli članic, članov in drugih.',
+  lineDe:
+    'Was das KUMST den Menschen bedeutet: Erinnerungen und Gedanken von Vereinsmitgliedern und anderen.',
   cta: { sl: 'Prenesi PDF', de: 'PDF herunterladen' },
   ctaOpen: { sl: 'Odpri v brskalniku', de: 'Im Browser öffnen' },
   hintSl: 'Brezplačno, brez prijave.',
