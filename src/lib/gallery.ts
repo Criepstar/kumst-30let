@@ -198,6 +198,24 @@ export async function movePhoto(id: string, direction: -1 | 1): Promise<boolean>
   return true;
 }
 
+/**
+ * Setzt ein Foto direkt auf eine 1-basierte Position (Reihenfolge im Admin,
+ * also inklusive unveröffentlichter Fotos). Werte außerhalb des Bereichs
+ * werden auf die erste bzw. letzte Position geklemmt.
+ */
+export async function movePhotoTo(id: string, position: number): Promise<boolean> {
+  const g = await readGallery();
+  const photos = [...g.photos];
+  const from = photos.findIndex((p) => p.id === id);
+  if (from < 0 || !Number.isFinite(position)) return false;
+  const to = Math.min(Math.max(Math.trunc(position), 1), photos.length) - 1;
+  if (to === from) return false;
+  const [moved] = photos.splice(from, 1);
+  photos.splice(to, 0, moved);
+  await writeGallery({ version: 1, photos });
+  return true;
+}
+
 export function mediaFilePath(id: string, variant: 'full' | 'thumb'): string | null {
   if (!/^[a-z0-9]{6,24}$/i.test(id)) return null;
   return path.join(UPLOAD_DIR, variant === 'thumb' ? `${id}-t.webp` : `${id}.webp`);

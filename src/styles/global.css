@@ -205,24 +205,37 @@
     margin-top: 0.9em;
   }
 
-  /* Galerie-Raster (Masonry über CSS-Spalten, damit die Archivformate bleiben) */
-  .masonry {
-    column-gap: 1.25rem;
+  /* Galerie: gelesen wird reihenweise von links nach rechts (1, 2, 3 …), nicht
+     spaltenweise. Das Script in PhotoGrid.astro gruppiert die Fotos dafür zu
+     Reihen zu 2 bzw. 3 Stück; ohne Script bleibt es eine Spalte untereinander.
+     Innerhalb einer Reihe bestimmt das Seitenverhältnis (`--a`) die Breite:
+     dadurch sind alle Fotos einer Reihe gleich hoch, die Reihe füllt die Breite
+     genau aus, und kein Archivfoto wird beschnitten. */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    align-items: start;
   }
-  @media (min-width: 640px) {
-    .masonry {
-      column-count: 2;
-    }
+  .photo-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
   }
-  @media (min-width: 1024px) {
-    .masonry {
-      column-count: 3;
-    }
+  .photo-row > .thumb {
+    flex-grow: var(--a, 1.5);
+    flex-shrink: 1;
+    flex-basis: 0;
+    min-width: 0;
+  }
+  /* Letzte, unvollständige Reihe: Fotos behalten ihre Spaltenbreite, statt
+     sich über die ganze Zeile zu ziehen. */
+  .photo-row[data-partial] > .thumb {
+    flex-grow: 0;
+    flex-basis: calc((100% - (var(--n, 3) - 1) * 1.25rem) / var(--n, 3));
   }
 
   .thumb {
-    break-inside: avoid;
-    margin-bottom: 1.25rem;
     display: block;
     position: relative;
     overflow: hidden;

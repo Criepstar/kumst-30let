@@ -13,13 +13,17 @@ const { photos, galleryUrl = u('/#galerija') } = Astro.props;
 
 const altFor = (photo: Photo) =>
   photo.captionSl || photo.captionDe || 'Arhivska fotografija / Archivfoto des Vereins Trta';
+
+/** Seitenverhältnis als Zahlenwert – steuert die Breite des Fotos in seiner Reihe. */
+const ratio = (photo: Photo) => (photo.height > 0 ? photo.width / photo.height : 1.5);
 ---
 
-<div class="columns-1 gap-5 sm:columns-2 lg:columns-3">
+<div class="photo-grid" data-photo-grid>
   {
     photos.map((photo, index) => (
       <a
         class="thumb group"
+        style={`--a:${ratio(photo).toFixed(4)}`}
         href={u(`/galerija/foto/${photo.id}`)}
         hx-get={u(`/galerija/foto/${photo.id}`)}
         hx-target="#lightbox-slot"
@@ -46,3 +50,53 @@ const altFor = (photo: Photo) =>
     ))
   }
 </div>
+
+<!--
+  Reihe für Reihe statt Spalte für Spalte: Die Liste ist eine flache Folge in
+  der Reihenfolge aus dem Admin (1, 2, 3 …). Hier werden daraus Reihen zu 2 bzw.
+  3 Fotos gruppiert, damit die Galerie von links nach rechts gelesen wird.
+  Bewusst inline und ohne defer: Das läuft noch vor dem ersten Aufbau der
+  Galerie, also ohne Aufblitzen der einspaltigen Fassung.
+-->
+<script is:inline>
+  (() => {
+    const root = document.querySelector('[data-photo-grid]');
+    if (!root) return;
+
+    const items = Array.from(root.children);
+    /** Spaltenzahl passend zu den Haltepunkten sm (640 px) und lg (1024 px) */
+    const columns = () => (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1);
+    let current = 0;
+
+    const build = () => {
+      const n = columns();
+      if (n === current) return;
+      current = n;
+
+      // Eine Spalte (mobil): einfach untereinander, jedes Foto in seiner Breite
+      if (n === 1) {
+        root.replaceChildren(...items);
+        return;
+      }
+
+      const rows = [];
+      for (let i = 0; i < items.length; i += n) {
+        const row = document.createElement('div');
+        row.className = 'photo-row';
+        row.style.setProperty('--n', String(n));
+        if (items.length - i < n) row.dataset.partial = '';
+        row.append(...items.slice(i, i + n));
+        rows.push(row);
+      }
+      root.replaceChildren(...rows);
+    };
+
+    build();
+
+    let frame = 0;
+    window.addEventListener('resize', () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(build);
+    });
+  })();
+</script>

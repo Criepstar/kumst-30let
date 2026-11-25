@@ -63,6 +63,29 @@ const formAttrs = {
     </button>
   </form>
 
+  <!-- Position direkt setzen: bei großen Galerien schneller als die Pfeile -->
+  <form {...formAttrs} class="border-t border-wine/15 px-3 py-2.5">
+    <input type="hidden" name="aktion" value="position" />
+    <label class="label block text-sage-deep" for={`poz-${photo.id}`}>Pozicija / Position</label>
+    <div class="mt-1.5 flex items-center gap-2">
+      <input
+        id={`poz-${photo.id}`}
+        type="number"
+        name="position"
+        min="1"
+        max={total}
+        step="1"
+        value={index + 1}
+        inputmode="numeric"
+        class="input w-14 px-1.5 py-1 text-center text-[0.8125rem] tabular-nums"
+      />
+      <span class="whitespace-nowrap text-[0.75rem] text-ink/50">/ {total}</span>
+    </div>
+    <button type="submit" class="btn btn-ghost mt-1.5 w-full justify-center py-1.5 text-[0.625rem]">
+      Premakni / Setzen
+    </button>
+  </form>
+
   <div class="flex flex-wrap items-center gap-1.5 border-t border-wine/15 px-3 py-2.5">
     <form {...formAttrs}>
       <input type="hidden" name="aktion" value="veroeffentlichen" />

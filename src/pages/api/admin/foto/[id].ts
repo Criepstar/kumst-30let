@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { deletePhoto, getPhoto, movePhoto, updatePhoto } from '../../../../lib/gallery';
+import { deletePhoto, getPhoto, movePhoto, movePhotoTo, updatePhoto } from '../../../../lib/gallery';
 import { htmlMessage, noContent, sameOrigin } from '../../../../lib/http';
 
 const OK = {
@@ -7,6 +7,7 @@ const OK = {
   veroeffentlichen: 'Spremenjeno / Sichtbarkeit geändert',
   'nach-oben': 'Premaknjeno / Verschoben',
   'nach-unten': 'Premaknjeno / Verschoben',
+  position: 'Premaknjeno / Verschoben',
   loeschen: 'Izbrisano / Gelöscht',
 } as const;
 
@@ -42,6 +43,16 @@ export const POST: APIRoute = async ({ request, params }) => {
     }
     case 'nach-unten': {
       await movePhoto(id, 1);
+      return noContent('galerie-geaendert');
+    }
+    case 'position': {
+      // Feld „Pozicija / Position“ im Admin: direkt an eine Stelle springen
+      const raw = String(form.get('position') ?? '').trim();
+      const pos = Number.parseInt(raw, 10);
+      if (!Number.isInteger(pos) || pos < 1) {
+        return htmlMessage('Neveljavna pozicija. / Ungültige Position.', 'error', 400);
+      }
+      await movePhotoTo(id, pos);
       return noContent('galerie-geaendert');
     }
     case 'loeschen': {
